@@ -34,8 +34,8 @@ internal val buildTools = BuildTools(
 )
 
 dependencies {
-    compileOnly(project("hd-api"))
-    compileOnly(project("game-api"))
+    compileOnly(project(":ihdeveloper-legacy-api"))
+    compileOnly(project(":legacy-game-api"))
 }
 
 allprojects {
