@@ -98,7 +98,7 @@ public class CommandManager implements CommandExecutor {
               return true;
             } 
           } 
-          HDPlayer HDPlayer = iHDeveloperAPI.getPlayer(((HDPlayer)sender).getName());
+          HDPlayer HDPlayer = iHDeveloperAPI.getPlayer(sender.getName());
           cmd.onPlayer(
                   HDPlayer,
               arg, cmdArgs);
