@@ -14,9 +14,9 @@ public class HerozGame {
   
   private boolean s;
   
-  private GameThreadManager bbManager;
+  private final GameThreadManager bbManager;
   
-  private BossBarThread bbThread;
+  private final BossBarThread bbThread;
   
   public HerozGame() {
     if (instance != null)
@@ -44,11 +44,12 @@ public class HerozGame {
         if (m.getName().equals(a))
           method = m; 
         b++;
-      } 
-      return method.invoke(getGameAPI(), new Object[0]);
+      }
+      assert method != null;
+      return method.invoke(getGameAPI());
     } catch (Exception ex) {
       ex.printStackTrace();
-      Console.log("&cERR: &7%s", new Object[] { ex.getMessage() });
+      Console.log("&cERR: &7%s", ex.getMessage());
       return null;
     } 
   }
@@ -65,29 +66,30 @@ public class HerozGame {
         if (m.getName().equals(a))
           method = m; 
         b1++;
-      } 
+      }
+      assert method != null;
       method.invoke(getGameAPI(), b);
     } catch (Exception ex) {
       ex.printStackTrace();
-      Console.log("&cERR: &7%s", new Object[] { ex.getMessage() });
+      Console.log("&cERR: &7%s", ex.getMessage());
     } 
   }
   
   public static void start() {
     if (isStarted())
       return; 
-    Console.log("&a###########################################", new Object[0]);
-    Console.log("&a#>           &eHeroz GameAPI", new Object[0]);
-    Console.log("&a#>", new Object[0]);
-    Console.log("&a#> &eGame Name: &7%s", new Object[] { getName() });
-    Console.log("&a#> &eGame Version: &7%s", new Object[] { getVersion() });
-    Console.log("&a#> &eGame Author: &7%s", new Object[] { getAuthor() });
-    Console.log("&a#> &eIs Prototype: &7%s", new Object[] { isPrototype() ? "&atrue" : "&cfalse" });
-    Console.log("&a#>", new Object[0]);
-    Console.log("&a#> &eCan use BossBar: &7%s", new Object[] { canUseBossBar() ? "&atrue" : "&cfalse" });
-    Console.log("&a#> &eCan use Title: &7%s", new Object[] { canUseTitle() ? "&atrue" : "&cfalse" });
-    Console.log("&a#>", new Object[0]);
-    Console.log("&a###########################################", new Object[0]);
+    Console.log("&a###########################################");
+    Console.log("&a#>           &eHeroz GameAPI");
+    Console.log("&a#>");
+    Console.log("&a#> &eGame Name: &7%s", getName());
+    Console.log("&a#> &eGame Version: &7%s", getVersion());
+    Console.log("&a#> &eGame Author: &7%s", getAuthor());
+    Console.log("&a#> &eIs Prototype: &7%s", isPrototype() ? "&atrue" : "&cfalse");
+    Console.log("&a#>");
+    Console.log("&a#> &eCan use BossBar: &7%s", canUseBossBar() ? "&atrue" : "&cfalse");
+    Console.log("&a#> &eCan use Title: &7%s", canUseTitle() ? "&atrue" : "&cfalse");
+    Console.log("&a#>");
+    Console.log("&a###########################################");
     (getHerozGame()).s = true;
     (getHerozGame()).bbManager.start();
   }
@@ -122,15 +124,15 @@ public class HerozGame {
   }
   
   public static boolean isPrototype() {
-    return ((Boolean)i("isPrototype")).booleanValue();
+    return (Boolean) i("isPrototype");
   }
   
   public static boolean canUseBossBar() {
-    return ((Boolean)i("canUseBossBar")).booleanValue();
+    return (Boolean) i("canUseBossBar");
   }
   
   public static boolean canUseTitle() {
-    return ((Boolean)i("canUseTitle")).booleanValue();
+    return (Boolean) i("canUseTitle");
   }
   
   public static boolean isStarted() {
@@ -138,26 +140,26 @@ public class HerozGame {
   }
   
   public static void setName(String name) {
-    s("setName", new Object[] { name });
+    s("setName", name);
   }
   
   public static void setVersion(String version) {
-    s("setVersion", new Object[] { version });
+    s("setVersion", version);
   }
   
   public static void setAuthor(String author) {
-    s("setAuthor", new Object[] { author });
+    s("setAuthor", author);
   }
   
   public static void setIsPrototype(boolean prototype) {
-    s("setIsPrototype", new Object[] { Boolean.valueOf(prototype) });
+    s("setIsPrototype", prototype);
   }
   
   public static void setBossBar(boolean bossbar) {
-    s("setBossBar", new Object[] { Boolean.valueOf(bossbar) });
+    s("setBossBar", bossbar);
   }
   
   public static void setTitle(boolean title) {
-    s("setTitle", new Object[] { Boolean.valueOf(title) });
+    s("setTitle", title);
   }
 }

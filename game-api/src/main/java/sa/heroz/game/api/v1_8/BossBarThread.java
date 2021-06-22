@@ -55,7 +55,7 @@ public class BossBarThread implements GameThread {
     String gameName = "&f&l" + HerozGame.getName();
     String on = "&e&lON";
     String[] colors = { "b", "a", "6", "9", "c", "d" };
-    String link = "MC.HEROZ.SA";
+    String link = "MC.IHDEVELOPER.ME";
     int color = ran.nextInt(colors.length);
     String text = playing + " " + gameName + " " + on + " &" + colors[color] + "&l" + link;
     BossBarAPI.removeAllBars(p.getPlayer());

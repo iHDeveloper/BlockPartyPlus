@@ -7,16 +7,16 @@ import sa.heroz.game.enums.GameSettingEnum;
 import sa.heroz.game.exceptions.InvaildClassTypeException;
 
 public class HerozGameAPI implements GameAPI {
-  private Map<GameSettingEnum, Object> settings;
+  private final Map<GameSettingEnum, Object> settings;
   
   public HerozGameAPI() {
     this.settings = new HashMap<>();
     a(GameSettingEnum.INFO_NAME, "Heroz Game");
     a(GameSettingEnum.INFO_VERSION, "V0.0_R0");
     a(GameSettingEnum.INFO_AUTHOR, "iHDeveloper");
-    a(GameSettingEnum.INFO_PROTOTYPE, Boolean.valueOf(false));
-    a(GameSettingEnum.PROPERTIES_BOSSBAR, Boolean.valueOf(false));
-    a(GameSettingEnum.PROPERTIES_TITLE, Boolean.valueOf(false));
+    a(GameSettingEnum.INFO_PROTOTYPE, false);
+    a(GameSettingEnum.PROPERTIES_BOSSBAR, false);
+    a(GameSettingEnum.PROPERTIES_TITLE, false);
   }
   
   public void setName(String name) {
@@ -45,7 +45,7 @@ public class HerozGameAPI implements GameAPI {
   
   public void setIsPrototype(boolean prototype) {
     try {
-      setSettings(GameSettingEnum.INFO_PROTOTYPE, new Boolean(prototype));
+      setSettings(GameSettingEnum.INFO_PROTOTYPE, prototype);
     } catch (InvaildClassTypeException e) {
       e.printStackTrace();
     } 
@@ -53,7 +53,7 @@ public class HerozGameAPI implements GameAPI {
   
   public void setBossBar(boolean bossbar) {
     try {
-      setSettings(GameSettingEnum.PROPERTIES_BOSSBAR, new Boolean(bossbar));
+      setSettings(GameSettingEnum.PROPERTIES_BOSSBAR, bossbar);
     } catch (InvaildClassTypeException e) {
       e.printStackTrace();
     } 
@@ -61,7 +61,7 @@ public class HerozGameAPI implements GameAPI {
   
   public void setTitle(boolean title) {
     try {
-      setSettings(GameSettingEnum.PROPERTIES_TITLE, new Boolean(title));
+      setSettings(GameSettingEnum.PROPERTIES_TITLE, title);
     } catch (InvaildClassTypeException e) {
       e.printStackTrace();
     } 
@@ -80,15 +80,15 @@ public class HerozGameAPI implements GameAPI {
   }
   
   public boolean isPrototype() {
-    return ((Boolean)getSetting(GameSettingEnum.INFO_PROTOTYPE)).booleanValue();
+    return (Boolean) getSetting(GameSettingEnum.INFO_PROTOTYPE);
   }
   
   public boolean canUseBossBar() {
-    return ((Boolean)getSetting(GameSettingEnum.PROPERTIES_BOSSBAR)).booleanValue();
+    return (Boolean) getSetting(GameSettingEnum.PROPERTIES_BOSSBAR);
   }
   
   public boolean canUseTitle() {
-    return ((Boolean)getSetting(GameSettingEnum.PROPERTIES_TITLE)).booleanValue();
+    return (Boolean) getSetting(GameSettingEnum.PROPERTIES_TITLE);
   }
   
   public void setSettings(GameSettingEnum setting, Object value) throws InvaildClassTypeException {
