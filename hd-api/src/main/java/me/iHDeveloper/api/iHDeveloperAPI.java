@@ -24,7 +24,7 @@ import me.iHDeveloper.api.events.PlayerWorldChangeEvent;
 import me.iHDeveloper.api.events.QuitEvent;
 import me.iHDeveloper.api.exceptions.APIException;
 import me.iHDeveloper.api.permission.PermissionsManager;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.Playerz;
 import me.iHDeveloper.api.player.UUIDDatabase;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;

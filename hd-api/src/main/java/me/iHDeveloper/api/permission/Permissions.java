@@ -1,6 +1,8 @@
 package me.iHDeveloper.api.permission;
 
 public enum Permissions {
+  ;
+
   private final String name;
   
   private final Permission permission;

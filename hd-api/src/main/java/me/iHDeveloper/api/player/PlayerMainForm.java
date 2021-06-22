@@ -44,7 +44,7 @@ public class PlayerMainForm extends Form {
       if (item.getText().equals(itemStack.getItemMeta().getDisplayName())) {
         try {
           item.getListener().onInteract(e);
-          Debug.log("Player Main Form Interact [name='%s',uuid='%s',item='%s']", new Object[] { player.getName(), player.getUUID(), 
+          Debug.log("Player Main Form Interact [name='%s',uuid='%s',item='%s']", new Object[] { player.getName(), player.getUUID(),
                 itemStack.getItemMeta().getDisplayName() });
         } catch (Exception exception) {}
         return;
