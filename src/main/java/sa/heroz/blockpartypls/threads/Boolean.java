@@ -1,17 +1,17 @@
 package sa.heroz.blockpartypls.threads;
 
 class Boolean {
-  private boolean a = false;
+  private boolean value = false;
   
-  Boolean(boolean a) {
-    A(a);
+  Boolean(boolean value) {
+    set(value);
   }
   
-  boolean a() {
-    return this.a;
+  boolean get() {
+    return this.value;
   }
   
-  void A(boolean a) {
-    this.a = a;
+  void set(boolean value) {
+    this.value = value;
   }
 }

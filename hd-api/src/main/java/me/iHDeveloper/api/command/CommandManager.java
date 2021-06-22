@@ -8,16 +8,13 @@ import java.util.Map;
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.exceptions.APIException;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
-import org.bukkit.command.Command;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 public class CommandManager implements CommandExecutor {
   private static CommandManager instance = new CommandManager();
-  
-  private static Map<String, Command> commands = new HashMap<>();
+  private static final Map<String, Command> commands = new HashMap<>();
   
   public static void load() {
     instance = new CommandManager();
@@ -26,7 +23,7 @@ public class CommandManager implements CommandExecutor {
   public static void addCommand(Command command) throws APIException {
     if (instance == null)
       load(); 
-    CommandInfo info = command.getClass().<CommandInfo>getAnnotation(CommandInfo.class);
+    CommandInfo info = command.getClass().getAnnotation(CommandInfo.class);
     if (info == null)
       throw new APIException("Not found the command class information!"); 
     String[] commands = info.commands();
@@ -38,22 +35,21 @@ public class CommandManager implements CommandExecutor {
       try {
         iHDeveloperAPI.getCommand(cmd).setExecutor(instance);
       } catch (NullPointerException ex) {
-        Debug.error("Cannot found command: %s", new Object[] { cmd });
+        Debug.error("Cannot found command: %s", cmd);
       } 
       CommandManager.commands.put(cmd, command);
       b++;
     } 
   }
   
-  public boolean onCommand(CommandSender sender, Command c, String arg2, String[] args) {
+  public boolean onCommand(CommandSender sender, org.bukkit.command.Command bukkitCommand, String arg2, String[] args) {
     for (String name : commands.keySet()) {
-      if (c.getName().equalsIgnoreCase(name)) {
+      if (bukkitCommand.getName().equalsIgnoreCase(name)) {
         Command cmd = commands.get(name);
-        CommandInfo info = cmd.getClass().<CommandInfo>getAnnotation(CommandInfo.class);
+        CommandInfo info = cmd.getClass().getAnnotation(CommandInfo.class);
         String[] commandArgs = info.args();
         String arg = "";
-        List<String> argsList = new LinkedList<>();
-        argsList.addAll(Arrays.asList(args));
+        List<String> argsList = new LinkedList<>(Arrays.asList(args));
         if (args.length > 0) {
           byte b;
           int i;
@@ -69,16 +65,11 @@ public class CommandManager implements CommandExecutor {
             b++;
           } 
         } 
-        String[] cmdArgs = argsList.<String>toArray(new String[0]);
-        boolean isPlayer = false;
-        if (sender instanceof org.bukkit.command.ConsoleCommandSender) {
-          isPlayer = false;
-        } else {
-          isPlayer = true;
-        } 
+        String[] cmdArgs = argsList.toArray(new String[0]);
+        boolean isPlayer = !(sender instanceof org.bukkit.command.ConsoleCommandSender);
         if (info.player() && 
           !isPlayer) {
-          sender.sendMessage(iHDeveloperAPI.color("&cThis command is only for player!", new Object[0]));
+          sender.sendMessage(iHDeveloperAPI.color("&cThis command is only for player!"));
           return true;
         } 
         if (!isPlayer) {
@@ -86,7 +77,7 @@ public class CommandManager implements CommandExecutor {
         } else {
           if (info.isOp() && 
             !sender.isOp()) {
-            sender.sendMessage(iHDeveloperAPI.color("&cYou must to be op for do this command!", new Object[0]));
+            sender.sendMessage(iHDeveloperAPI.color("&cYou must to be op for do this command!"));
             return true;
           } 
           if ((info.permissions()).length > 0) {
@@ -103,20 +94,20 @@ public class CommandManager implements CommandExecutor {
               b++;
             } 
             if (!have) {
-              sender.sendMessage(iHDeveloperAPI.color("&cYou don't have any permission to do this command!s", new Object[0]));
+              sender.sendMessage(iHDeveloperAPI.color("&cYou don't have any permission to do this command!s"));
               return true;
             } 
           } 
-          Player player = iHDeveloperAPI.getPlayer(((Player)sender).getName());
+          HDPlayer HDPlayer = iHDeveloperAPI.getPlayer(((HDPlayer)sender).getName());
           cmd.onPlayer(
-              player, 
+                  HDPlayer,
               arg, cmdArgs);
-          Debug.log(String.valueOf(sender.getName()) + " process command /" + c.getName() + " " + arg, new Object[0]);
+          Debug.log(sender.getName() + " process command /" + bukkitCommand.getName() + " " + arg);
         } 
         return true;
       } 
     } 
-    Debug.log("Not found command /" + c.getName(), new Object[0]);
+    Debug.log("Not found command /" + bukkitCommand.getName());
     return true;
   }
 }

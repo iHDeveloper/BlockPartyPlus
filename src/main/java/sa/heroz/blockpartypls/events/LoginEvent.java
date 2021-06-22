@@ -1,7 +1,7 @@
 package sa.heroz.blockpartypls.events;
 
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -14,7 +14,7 @@ import sa.heroz.blockpartypls.until.Settings;
 public class LoginEvent implements Listener {
   @EventHandler(priority = EventPriority.LOWEST)
   public void onLogin(PlayerLoginEvent e) {
-    Player p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
+    HDPlayer p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
     Console.log("%s trying to login", new Object[] { e.getPlayer().getName() });
     if (Game.getState() == GameState.WAITING) {
       if (Game.getAllPlayers().size() >= Settings.maxPlayers) {

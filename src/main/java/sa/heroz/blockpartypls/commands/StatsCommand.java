@@ -2,7 +2,7 @@ package sa.heroz.blockpartypls.commands;
 
 import me.iHDeveloper.api.command.Command;
 import me.iHDeveloper.api.command.CommandInfo;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.command.CommandSender;
 import sa.heroz.blockpartypls.game.Game;
 import sa.heroz.blockpartypls.until.GamePlayer;
@@ -11,7 +11,7 @@ import sa.heroz.blockpartypls.until.GamePlayer;
 public class StatsCommand implements Command {
   public void onConsole(CommandSender sender, String arg, String[] args) {}
   
-  public void onPlayer(Player sender, String arg, String[] args) {
+  public void onPlayer(HDPlayer sender, String arg, String[] args) {
     if (args.length == 0) {
       GamePlayer stats = Game.getPlayer(sender.getUUID());
       sender.sendSub();

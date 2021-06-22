@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.UUID;
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.spectate.ui.BackToHubFolder;
 import me.iHDeveloper.api.spectate.ui.CompassFolder;
 import me.iHDeveloper.api.spectate.ui.PlayAgainFolder;
@@ -14,40 +14,40 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 public class SpectateSystem {
-  private static Map<UUID, Player> players = new HashMap<>();
+  private static final Map<UUID, HDPlayer> players = new HashMap<>();
   
-  public static void addPlayer(Player player) {
-    players.put(player.getUUID(), player);
-    player.clearInv();
-    player.addItem(0, new CompassFolder());
-    player.addItem(7, new PlayAgainFolder());
-    player.addItem(8, new BackToHubFolder());
-    player.setGameMode(GameMode.ADVENTURE);
-    player.getPlayer().setAllowFlight(true);
-    player.getPlayer().setFallDistance(0.0F);
+  public static void addPlayer(HDPlayer HDPlayer) {
+    players.put(HDPlayer.getUUID(), HDPlayer);
+    HDPlayer.clearInv();
+    HDPlayer.addItem(0, new CompassFolder());
+    HDPlayer.addItem(7, new PlayAgainFolder());
+    HDPlayer.addItem(8, new BackToHubFolder());
+    HDPlayer.setGameMode(GameMode.ADVENTURE);
+    HDPlayer.getPlayer().setAllowFlight(true);
+    HDPlayer.getPlayer().setFallDistance(0.0F);
     for (Player p : Bukkit.getOnlinePlayers()) {
       if (!is(iHDeveloperAPI.getPlayer(p.getName())))
-        p.hidePlayer(player.getPlayer()); 
+        p.hidePlayer(HDPlayer.getPlayer());
     } 
-    Debug.log("[/%s] Added on spectate system", new Object[] { player.getName() });
+    Debug.log("[/%s] Added on spectate system", HDPlayer.getName());
   }
   
-  public static void removePlayer(Player player) {
-    if (!is(player))
+  public static void removePlayer(HDPlayer HDPlayer) {
+    if (!is(HDPlayer))
       return; 
-    players.put(player.getUUID(), null);
-    player.clearInv();
-    player.getPlayer().setAllowFlight(false);
-    player.setGameMode(GameMode.ADVENTURE);
+    players.put(HDPlayer.getUUID(), null);
+    HDPlayer.clearInv();
+    HDPlayer.getPlayer().setAllowFlight(false);
+    HDPlayer.setGameMode(GameMode.ADVENTURE);
     for (Player p : Bukkit.getOnlinePlayers())
-      p.showPlayer(player.getPlayer()); 
-    Debug.log("[/%s] Removed on spectate system", new Object[] { player.getName() });
+      p.showPlayer(HDPlayer.getPlayer());
+    Debug.log("[/%s] Removed on spectate system", HDPlayer.getName());
   }
   
-  public static boolean is(Player player) {
-    boolean b = false;
+  public static boolean is(HDPlayer HDPlayer) {
+    boolean b;
     try {
-      Player p = players.get(player.getUUID());
+      HDPlayer p = players.get(HDPlayer.getUUID());
       if (p == null)
         return false; 
       b = true;
@@ -59,10 +59,10 @@ public class SpectateSystem {
   
   public static void reset() {
     for (UUID uuid : players.keySet()) {
-      Player player = players.get(uuid);
-      if (player != null)
-        removePlayer(player); 
+      HDPlayer HDPlayer = players.get(uuid);
+      if (HDPlayer != null)
+        removePlayer(HDPlayer);
     } 
-    Debug.log("SpectateSystem has been reseted!", new Object[0]);
+    Debug.log("SpectateSystem has been reseted!");
   }
 }

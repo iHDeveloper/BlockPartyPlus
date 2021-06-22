@@ -2,7 +2,7 @@ package sa.heroz.blockpartypls.commands;
 
 import me.iHDeveloper.api.command.Command;
 import me.iHDeveloper.api.command.CommandInfo;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.spectate.SpectateSystem;
 import net.minecraft.server.v1_8_R3.Vector3f;
 import org.bukkit.DyeColor;
@@ -16,17 +16,15 @@ import sa.heroz.blockpartypls.entities.RIPEntity;
 import sa.heroz.blockpartypls.game.Game;
 import sa.heroz.blockpartypls.until.Floor;
 import sa.heroz.blockpartypls.until.Settings;
-import sa.heroz.blockpartypls.until.floor.BlockChange;
 
-@CommandInfo(commands = {"game"}, args = {"config", "start", "test", "debug"}, isOp = true, player = true, console = false, permissions = {""})
+@SuppressWarnings("deprecation")
+@CommandInfo(commands = {"game"}, args = {"config", "start", "test", "debug"}, isOp = true, console = false, permissions = {""})
 public class GameCommand implements Command {
   public void onConsole(CommandSender sender, String arg, String[] args) {}
   
   private Location pos1 = null;
-  
-  private Location pos2 = null;
-  
-  public void onPlayer(Player sender, String arg, String[] args) {
+
+  public void onPlayer(HDPlayer sender, String arg, String[] args) {
     if (arg.equalsIgnoreCase("config")) {
       if (args.length == 1) {
         if (args[0].equalsIgnoreCase("lobby")) {
@@ -44,21 +42,21 @@ public class GameCommand implements Command {
         } else {
           if (args[0].equalsIgnoreCase("pos1")) {
             this.pos1 = sender.getLocation();
-            sender.send("&aDone. Please set posittion 2 to complete!", new Object[0]);
+            sender.send("&aDone. Please set posittion 2 to complete!");
             pointBlock(sender, 1);
             return;
           } 
           if (args[0].equalsIgnoreCase("pos2")) {
             if (this.pos1 == null) {
-              sender.sendError("Please set position 1 before 2", new Object[0]);
+              sender.sendError("Please set position 1 before 2");
               return;
-            } 
-            this.pos2 = sender.getLocation();
+            }
+            Location pos2 = sender.getLocation();
             pointBlock(sender, 2);
             Settings.setPosition1(this.pos1);
-            Settings.setPosition2(this.pos2);
+            Settings.setPosition2(pos2);
             clearPoints();
-            sender.send("&aDone! &eyou can play now BLOCKPARYT+ YAY! ;D", new Object[0]);
+            sender.send("&aDone! &eyou can play now BLOCKPARYT+ YAY! ;D");
             return;
           } 
           if (args[0].equalsIgnoreCase("author")) {
@@ -66,26 +64,26 @@ public class GameCommand implements Command {
             location.setX(sender.getLocation().getBlockX());
             Settings.setAuthorNPC(location);
           } else {
-            sender.send("&9/game &econfig &7lobby", new Object[0]);
-            sender.send("&9/game &econfig &7loading", new Object[0]);
-            sender.send("&9/game &econfig &7author", new Object[0]);
-            sender.send("&9/game &econfig &7game", new Object[0]);
-            sender.send("&9/game &econfig &7pos1", new Object[0]);
-            sender.send("&9/game &econfig &7pos2", new Object[0]);
+            sender.send("&9/game &econfig &7lobby");
+            sender.send("&9/game &econfig &7loading");
+            sender.send("&9/game &econfig &7author");
+            sender.send("&9/game &econfig &7game");
+            sender.send("&9/game &econfig &7pos1");
+            sender.send("&9/game &econfig &7pos2");
             return;
           } 
         } 
-        sender.send("&aDone!", new Object[0]);
+        sender.send("&aDone!");
         return;
       } 
-      sender.send("&9/game &econfig &7lobby", new Object[0]);
-      sender.send("&9/game &econfig &7game", new Object[0]);
-      sender.send("&9/game &econfig &7pos1", new Object[0]);
-      sender.send("&9/game &econfig &7pos2", new Object[0]);
+      sender.send("&9/game &econfig &7lobby");
+      sender.send("&9/game &econfig &7game");
+      sender.send("&9/game &econfig &7pos1");
+      sender.send("&9/game &econfig &7pos2");
       return;
     } 
     if (arg.equalsIgnoreCase("start")) {
-      sender.send("&aThe game is starting", new Object[0]);
+      sender.send("&aThe game is starting");
       Game.startByAdmin(sender);
       return;
     } 
@@ -93,7 +91,7 @@ public class GameCommand implements Command {
       if (args.length == 1) {
         if (args[0].equalsIgnoreCase("1")) {
           test1();
-          sender.send("&eTest...", new Object[0]);
+          sender.send("&eTest...");
           return;
         } 
         if (args[0].equalsIgnoreCase("2")) {
@@ -155,26 +153,26 @@ public class GameCommand implements Command {
           return;
         } 
       } 
-      sender.send("&9/game &etest 1", new Object[0]);
-      sender.send("&9/game &etest 2", new Object[0]);
+      sender.send("&9/game &etest 1");
+      sender.send("&9/game &etest 2");
       return;
     } 
     if (arg.equalsIgnoreCase("debug")) {
       if (args.length == 1) {
         if (args[0].equalsIgnoreCase("players")) {
           sender.sendSub();
-          sender.send("&9All: &e%s", new Object[] { Integer.valueOf(Game.getAllPlayers().size()) });
-          sender.send("&9Alive: &e%s", new Object[] { Integer.valueOf(Game.getAlivePlayers().size()) });
-          sender.send("&9Spectators: &e%s", new Object[] { Integer.valueOf(Game.getSpectatorsPlayers().size()) });
+          sender.send("&9All: &e%s", Game.getAllPlayers().size());
+          sender.send("&9Alive: &e%s", Game.getAlivePlayers().size());
+          sender.send("&9Spectators: &e%s", Game.getSpectatorsPlayers().size());
           sender.sendSub();
         } 
       } else {
-        sender.send("&9/game &edebug players", new Object[0]);
+        sender.send("&9/game &edebug players");
       } 
       return;
     } 
-    sender.send("&9/game &econfig", new Object[0]);
-    sender.send("&9/game &estart", new Object[0]);
+    sender.send("&9/game &econfig");
+    sender.send("&9/game &estart");
   }
   
   private void showRIP() {
@@ -183,26 +181,24 @@ public class GameCommand implements Command {
     this.ripEntity.showAll();
   }
   
-  private void ripInfo(Player sender) {
+  private void ripInfo(HDPlayer sender) {
     if (this.ripEntity == null)
       return; 
-    sender.send("&fHead Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).headPose) });
-    sender.send("&fBody Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).bodyPose) });
-    sender.send("&fLeftArm Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).leftArmPose) });
-    sender.send("&fRightArm Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).rightArmPose) });
-    sender.send("&fLeftLeg Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).leftLegPose) });
-    sender.send("&fRightLeg Pose: %s", new Object[] { toVectorString((this.ripEntity.getEntity()).rightLegPose) });
+    sender.send("&fHead Pose: %s", toVectorString((this.ripEntity.getEntity()).headPose));
+    sender.send("&fBody Pose: %s", toVectorString((this.ripEntity.getEntity()).bodyPose));
+    sender.send("&fLeftArm Pose: %s", toVectorString((this.ripEntity.getEntity()).leftArmPose));
+    sender.send("&fRightArm Pose: %s", toVectorString((this.ripEntity.getEntity()).rightArmPose));
+    sender.send("&fLeftLeg Pose: %s", toVectorString((this.ripEntity.getEntity()).leftLegPose));
+    sender.send("&fRightLeg Pose: %s", toVectorString((this.ripEntity.getEntity()).rightLegPose));
   }
   
   private String toVectorString(Vector3f v) {
-    String x = "";
-    x = String.format("X:%s | Y:%s | Z:%s", new Object[] { Float.valueOf(v.getX()), Float.valueOf(v.getY()), Float.valueOf(v.getZ()) });
-    return x;
+      return String.format("X:%s | Y:%s | Z:%s", v.getX(), v.getY(), v.getZ());
   }
   
   private RIPEntity ripEntity = null;
   
-  private void createRIP(Player sender) {
+  private void createRIP(HDPlayer sender) {
     if (this.ripEntity != null)
       return; 
     this.ripEntity = new RIPEntity(sender, sender.getLocation());
@@ -216,9 +212,9 @@ public class GameCommand implements Command {
     this.ripEntity.die();
     this.ripEntity = null;
   }
-  
+
   private void a(DyeColor color) {
-    System.out.println(String.valueOf(color.toString()) + " = " + color.getData());
+    System.out.println(color.toString() + " = " + color.getData());
   }
   
   private Block point1 = null;
@@ -229,7 +225,7 @@ public class GameCommand implements Command {
   
   private Material t2 = null;
   
-  private void pointBlock(Player player, int i) {
+  private void pointBlock(HDPlayer player, int i) {
     Location p = player.getLocation();
     World w = player.getLocation().getWorld();
     p.setY(p.getY() - 1.0D);
@@ -254,21 +250,17 @@ public class GameCommand implements Command {
   }
   
   private void test1() {
-    (new Floor(null)).drawFloor(new BlockChange() {
-          public void onBlock(Block block) {
-            if (block.getType().equals(Material.WOOL))
-              block.setType(Material.GOLD_BLOCK); 
-          }
-        });
+    (new Floor(null)).drawFloor(block -> {
+      if (block.getType().equals(Material.WOOL))
+        block.setType(Material.GOLD_BLOCK);
+    });
   }
   
   private void test2() {
-    (new Floor(null)).drawFloor(new BlockChange() {
-          public void onBlock(Block block) {
-            if (block.getType().equals(Material.GOLD_BLOCK))
-              block.setType(Material.WOOL); 
-          }
-        });
+    (new Floor(null)).drawFloor(block -> {
+      if (block.getType().equals(Material.GOLD_BLOCK))
+        block.setType(Material.WOOL);
+    });
   }
   
   private void test5() {

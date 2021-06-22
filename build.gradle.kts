@@ -51,6 +51,8 @@ allprojects {
     repositories {
         mavenCentral()
         mavenLocal()
+
+        maven { url = uri("https://jitpack.io") }
     }
 
     dependencies {
@@ -71,27 +73,26 @@ allprojects {
     }
 
     tasks {
-        /**
-         * Overwrite the build task to put the compiled jar into the build folder instead of build/libs
-         */
-        build {
-            dependsOn("shadowJar")
-
-            // Copy the compiled plugin jar from build/libs to build/
-            doLast {
-                copy {
-                    val libsDir = File("${project.buildDir}/libs")
-                    from(libsDir)
-                    into(libsDir.parent)
-                }
-            }
-        }
-
         shadowJar {
             from("LICENSE")
 
             val name = "${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}"
             archiveFileName.set(name)
+
+            // Copy the compiled plugin jar from build/libs to build/
+            doLast {
+                val libsDir = File("${project.buildDir}/libs")
+                copy {
+                    from(libsDir)
+                    into(libsDir.parent)
+                }
+                if (rootProject != project) {
+                    copy {
+                        from(libsDir)
+                        into(rootProject.buildDir)
+                    }
+                }
+            }
         }
 
         /**

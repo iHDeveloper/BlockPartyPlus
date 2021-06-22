@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -41,12 +41,12 @@ public class Form extends ComponentGUI {
     } 
   }
   
-  public void show(final Player player) {
+  public void show(final HDPlayer HDPlayer) {
     final Form form = this;
     Bukkit.getScheduler().scheduleSyncDelayedTask((Plugin)iHDeveloperAPI.getPlugin(), new Runnable() {
           public void run() {
-            player.openInv(Form.this.inv);
-            player.setForm(form);
+            HDPlayer.openInv(Form.this.inv);
+            HDPlayer.setForm(form);
           }
         },  10L);
   }
@@ -56,7 +56,7 @@ public class Form extends ComponentGUI {
     getInventory().clear();
   }
   
-  public void click(InventoryClickEvent e, Player player, ItemStack itemStack) {
+  public void click(InventoryClickEvent e, HDPlayer HDPlayer, ItemStack itemStack) {
     for (ComponentItem item : getItems()) {
       if (item.getItem().equals(e.getCursor())) {
         try {
@@ -67,7 +67,7 @@ public class Form extends ComponentGUI {
     } 
   }
   
-  public void interact(PlayerInteractEvent e, Player player, ItemStack itemStack) {
+  public void interact(PlayerInteractEvent e, HDPlayer HDPlayer, ItemStack itemStack) {
     for (ComponentItem item : getItems()) {
       if (item.getItem().equals(itemStack)) {
         try {

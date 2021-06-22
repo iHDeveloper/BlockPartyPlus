@@ -4,11 +4,9 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.thread.GameThread;
 import me.iHDeveloper.api.thread.GameThreadManager;
 import me.iHDeveloper.api.thread.GameThreadOptions;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import sa.heroz.blockpartypls.game.Game;
 import sa.heroz.blockpartypls.game.GameState;
 import sa.heroz.blockpartypls.rounds.ClayRound;
@@ -25,22 +23,19 @@ import sa.heroz.blockpartypls.until.Settings;
 import sa.heroz.blockpartypls.until.round.Round;
 
 @GameThreadOptions(13500)
-public class GameThread implements GameThread {
+public class GameThread implements me.iHDeveloper.api.thread.GameThread {
   boolean a;
   
   public int round;
   
-  private GameEvents g;
-  
+  private final GameEvents g;
   private final Floor floor;
+  private final SecureRandom ran;
+  private final Boolean c;
   
   private Round theRoundClass;
   
-  private final SecureRandom ran;
-  
   private boolean b;
-  
-  private final Boolean c;
   
   public GameThread() {
     this.theRoundClass = null;
@@ -74,8 +69,7 @@ public class GameThread implements GameThread {
     rounds.add(new NetherRound(this.round));
     rounds.add(new ForestRound(this.round));
     int roundID = this.ran.nextInt(rounds.size());
-    Round theNextRound = rounds.get(roundID);
-    return theNextRound;
+    return rounds.get(roundID);
   }
   
   public boolean run(int sec, GameThreadManager gtm) {
@@ -95,21 +89,21 @@ public class GameThread implements GameThread {
       } 
       return true;
     } 
-    if (!this.c.a()) {
-      this.c.A(true);
-      Bukkit.getScheduler().runTask((Plugin)iHDeveloperAPI.getPlugin(), new Runnable() {
-            public void run() {
-              for (GamePlayer gp : Game.getAllPlayers()) {
-                try {
-                  int pos1 = Settings.pos1.getBlockY() - 1;
-                  int pos2 = gp.getPlayer().getLocation().getBlockY();
-                  if (pos2 < pos1)
-                    Game.eliminate(gp.getPlayer(), gp.getPlayer().getLocation()); 
-                } catch (Exception exception) {}
-              } 
-              GameThread.this.c.A(false);
-            }
-          });
+    if (!this.c.get()) {
+      this.c.set(true);
+      Bukkit.getScheduler().runTask(iHDeveloperAPI.getPlugin(), () -> {
+        for (GamePlayer gp : Game.getAllPlayers()) {
+          try {
+            int pos1 = Settings.pos1.getBlockY() - 1;
+            int pos2 = gp.getPlayer().getLocation().getBlockY();
+            if (pos2 < pos1)
+              Game.eliminate(gp.getPlayer(), gp.getPlayer().getLocation());
+          } catch (Exception exception) {
+            exception.printStackTrace();
+          }
+        }
+        GameThread.this.c.set(false);
+      });
     } 
     if (sec == 13000) {
       debug("Start Step");
@@ -127,7 +121,7 @@ public class GameThread implements GameThread {
         this.theRoundClass.random(1);
       } else if (sec == 10000) {
         this.theRoundClass.random(2);
-      } else if (sec == 9000) {
+      } else {
         this.theRoundClass.random(3);
       } 
       this.a = true;
@@ -146,7 +140,7 @@ public class GameThread implements GameThread {
       return true;
     } 
     if (sec == 1200) {
-      debug("Reseting the round...");
+      debug("Resetting the round...");
       this.theRoundClass.reset(getFloor());
       gtm.reset();
       this.round++;
@@ -164,6 +158,6 @@ public class GameThread implements GameThread {
   }
   
   private void debug(String format) {
-    Debug.log("[GAME-THREAD (ROUND-%s)] %s", new Object[] { Integer.valueOf(this.round), format });
+    Debug.log("[GAME-THREAD (ROUND-%s)] %s", Integer.valueOf(this.round), format);
   }
 }

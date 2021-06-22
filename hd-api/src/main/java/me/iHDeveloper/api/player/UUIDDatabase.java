@@ -11,17 +11,18 @@ import org.bukkit.entity.Player;
 
 public class UUIDDatabase {
   private Map<String, String> uuids;
-  
+
+  @SuppressWarnings("unchecked")
   public UUIDDatabase() {
     try {
       YamlConfiguration c = getUUIDYMLData();
       Object obj = c.get("uuids");
-      if (obj != null && 
-        obj instanceof Map)
-        this.uuids = (Map<String, String>)obj; 
+      if (obj instanceof Map) {
+        this.uuids = (Map<String, String>) obj;
+      }
     } catch (NullPointerException ex) {
       this.uuids = new HashMap<>();
-      Debug.error("Can't load uuids database", new Object[0]);
+      Debug.error("Can't load uuids database");
     } 
     if (this.uuids == null)
       this.uuids = new HashMap<>(); 
@@ -32,12 +33,14 @@ public class UUIDDatabase {
       UUID uuid = null;
       try {
         uuid = UUID.fromString(this.uuids.get(p.getName()));
-      } catch (NullPointerException nullPointerException) {}
+      } catch (NullPointerException exception) {
+        exception.printStackTrace();
+      }
       if (uuid == null) {
         update(p);
         uuid = UUID.fromString(this.uuids.get(p.getName()));
       } 
-      Debug.log("UUIDDatabase - Get [name='" + p.getName() + "',uuid'" + uuid + "']", new Object[0]);
+      Debug.log("UUIDDatabase - Get [name='" + p.getName() + "',uuid'" + uuid + "']");
       return uuid;
     } catch (NullPointerException ex) {
       ex.printStackTrace();
@@ -49,27 +52,28 @@ public class UUIDDatabase {
     return UUID.fromString(this.uuids.get(name));
   }
   
-  public void update(Player player) {
+  public void update(HDPlayer player) {
     update(player.getPlayer());
   }
   
   public void update(Player player) {
-    Player p = player;
     UUID old = null;
-    UUID update = p.getUniqueId();
+    UUID update = player.getUniqueId();
     try {
       try {
         old = UUID.fromString(this.uuids.get(player.getName()));
-      } catch (NullPointerException nullPointerException) {}
+      } catch (NullPointerException exception) {
+        exception.printStackTrace();
+      }
       if (old == null) {
-        this.uuids.put(p.getName(), update.toString());
+        this.uuids.put(player.getName(), update.toString());
       } else if (!old.equals(update)) {
-        this.uuids.put(p.getName(), update.toString());
+        this.uuids.put(player.getName(), update.toString());
       } 
     } catch (NullPointerException ex) {
-      this.uuids.put(p.getName(), update.toString());
+      this.uuids.put(player.getName(), update.toString());
     } 
-    Debug.log("UUIDDatabase - Update [old='" + old + "',update='" + update + "']", new Object[0]);
+    Debug.log("UUIDDatabase - Update [old='" + old + "',update='" + update + "']");
     saveDataBase();
   }
   
@@ -80,27 +84,23 @@ public class UUIDDatabase {
       c.save(getUUIDYMLDataFile());
     } catch (Exception ex) {
       ex.printStackTrace();
-      Debug.error("Cannot save the uuids yml data", new Object[0]);
+      Debug.error("Cannot save the uuids yml data");
     } 
   }
   
   private File getUUIDYMLDataFile() {
-    try {
-      File file = new File(iHDeveloperAPI.getDataFolder() + "/uuids.ymldata");
-      file.createNewFile();
-      return file;
-    } catch (Exception ex) {
-      return null;
-    } 
+    return new File(iHDeveloperAPI.getDataFolder() + "/uuids.ymldata");
   }
   
   private YamlConfiguration getUUIDYMLData() {
+    YamlConfiguration c = new YamlConfiguration();
     try {
-      YamlConfiguration c = new YamlConfiguration();
-      c.load(getUUIDYMLDataFile());
-      return c;
-    } catch (Exception ex) {
-      return null;
-    } 
+      File dataFile = getUUIDYMLDataFile();
+      if (!dataFile.createNewFile())
+        c.load(dataFile);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return c;
   }
 }

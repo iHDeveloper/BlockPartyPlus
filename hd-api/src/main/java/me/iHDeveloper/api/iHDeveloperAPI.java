@@ -24,7 +24,7 @@ import me.iHDeveloper.api.events.PlayerWorldChangeEvent;
 import me.iHDeveloper.api.events.QuitEvent;
 import me.iHDeveloper.api.exceptions.APIException;
 import me.iHDeveloper.api.permission.PermissionsManager;
-import me.iHDeveloper.api.player.Playerz;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.player.UUIDDatabase;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -66,7 +66,7 @@ public class iHDeveloperAPI {
   
   private static UUIDDatabase uuids;
   
-  private static Map<UUID, Player> players;
+  private static Map<UUID, HDPlayer> players;
   
   private static String prefix = "&b| &3iHDeveloper&cAPI&6 &b|";
   
@@ -128,15 +128,15 @@ public class iHDeveloperAPI {
         loadPlayer(player);
       } catch (Exception ex) {
         ex.printStackTrace();
-        Debug.error("Invaild to load player %s", new Object[] { player.getName() });
+        Debug.error("Invaild to load player %s", player.getName());
       } 
     } 
   }
   
   public static void loadPlayer(Player player) throws APIException {
-    Player p = new Player(player);
+    HDPlayer p = new HDPlayer(player);
     players.put(p.getUUID(), p);
-    Debug.log("[%s] Loaded as %s", new Object[] { p.getName(), p.getUUID() });
+    Debug.log("[%s] Loaded as %s", p.getName(), p.getUUID());
   }
   
   private static void loadCommands() {
@@ -150,7 +150,7 @@ public class iHDeveloperAPI {
   
   public synchronized void setPrefix(String prefix) {
     iHDeveloperAPI.prefix = prefix;
-    Debug.log("The prefix has been changed to " + prefix, new Object[0]);
+    Debug.log("The prefix has been changed to " + prefix);
   }
   
   public static File getDataFolder() {
@@ -180,25 +180,24 @@ public class iHDeveloperAPI {
   public static Server getServer() {
     return getPlugin().getServer();
   }
-  
-  public static Player getPlayer(String name) {
+
+  public static HDPlayer getPlayer(String name) {
     UUID uuid = null;
     try {
       uuid = getUUIDDatabase().get(name);
-    } catch (NullPointerException nullPointerException) {}
+    } catch (NullPointerException exception) {
+      exception.printStackTrace();
+    }
     if (uuid == null)
       return null; 
-    Player player = getPlayer(uuid);
-    if (player == null)
-      return null; 
-    return player;
+    return getPlayer(uuid);
   }
   
-  public static Player getPlayer(UUID uuid) {
+  public static HDPlayer getPlayer(UUID uuid) {
     if (uuid == null)
       return null; 
     try {
-      Player u = players.get(uuid);
+      HDPlayer u = players.get(uuid);
       return u;
     } catch (NullPointerException nullPointerException) {
       return null;
@@ -209,12 +208,11 @@ public class iHDeveloperAPI {
     return ChatColor.translateAlternateColorCodes('&', String.format(format, args));
   }
   
-  public static List<Player> getPlayers() {
-    List<Player> list = new ArrayList<>();
+  public static List<HDPlayer> getPlayers() {
+    List<HDPlayer> list = new ArrayList<>();
     for (Player p : getServer().getOnlinePlayers()) {
-      Player pClass = getPlayer(p.getName());
-      if (p != null)
-        list.add(pClass); 
+      HDPlayer pClass = getPlayer(p.getName());
+      list.add(pClass);
     } 
     return list;
   }

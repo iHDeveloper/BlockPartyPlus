@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import me.iHDeveloper.api.hologram.Hologram;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import net.minecraft.server.v1_8_R3.EntityHuman;
 import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
@@ -27,22 +27,18 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class NPC {
-  private static Map<String, NPC> npcs = new HashMap<>();
-  
-  private Entity entity;
-  
-  private Hologram hologram;
-  
+  private static final Map<String, NPC> npcs = new HashMap<>();
+
+  private final Entity entity;
+  private final Hologram hologram;
   private final String name;
-  
+
   public static Set<String> getAllNPCsName() {
     return npcs.keySet();
   }
   
   public static String shuffleName() {
-    UUID uuid = UUID.randomUUID();
-    String id = uuid.toString().substring(0, 5);
-    return id;
+    return UUID.randomUUID().toString().substring(0, 5);
   }
   
   public NPC(Location location, UUID uuid) {
@@ -69,17 +65,17 @@ public class NPC {
     return this.entity;
   }
   
-  public void showPlayer(Player player) {
+  public void showPlayer(HDPlayer player) {
     showPlayer(player.getPlayer());
   }
   
   public void showPlayer(Player player) {
     PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn((EntityHuman)this.entity);
-    PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, new EntityPlayer[] { this.entity });
+    PacketPlayOutPlayerInfo info = new PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER, this.entity);
     CraftPlayer p = (CraftPlayer)player;
     PlayerConnection connection = (p.getHandle()).playerConnection;
-    connection.sendPacket((Packet)spawn);
-    connection.sendPacket((Packet)info);
+    connection.sendPacket(spawn);
+    connection.sendPacket(info);
   }
   
   public void showAll() {
@@ -87,19 +83,28 @@ public class NPC {
       showPlayer(player); 
   }
   
-  public void hidePlayer(Player player) {
+  public void hidePlayer(HDPlayer player) {
     hidePlayer(player.getPlayer());
   }
   
   public void hidePlayer(Player player) {
-    PacketPlayOutEntityDestroy destory = new PacketPlayOutEntityDestroy(new int[] { this.entity.getId() });
+    PacketPlayOutEntityDestroy destory = new PacketPlayOutEntityDestroy(this.entity.getId());
     CraftPlayer p = (CraftPlayer)player;
     PlayerConnection connection = (p.getHandle()).playerConnection;
-    connection.sendPacket((Packet)destory);
+    connection.sendPacket(destory);
   }
   
   public void hideAll() {
     for (Player player : Bukkit.getOnlinePlayers())
       hidePlayer(player); 
+  }
+
+  @Override
+  public String toString() {
+    return "NPC{" +
+            "entity=" + entity +
+            ", hologram=" + hologram +
+            ", name='" + name + '\'' +
+            '}';
   }
 }

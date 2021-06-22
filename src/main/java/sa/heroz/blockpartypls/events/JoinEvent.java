@@ -1,7 +1,7 @@
 package sa.heroz.blockpartypls.events;
 
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -15,7 +15,7 @@ public class JoinEvent implements Listener {
   
   @EventHandler(priority = EventPriority.HIGH)
   public void onJoin(PlayerJoinEvent e) {
-    Player p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
+    HDPlayer p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
     p.sendSub(37);
     p.send("             &9&lBlock&3&lParty&e&l+ &b| &7V0.2 &b| &e&nNEW GAME!", new Object[0]);
     p.send("&b&l-|- &6&l5 &e&lNEW MODES!", new Object[0]);

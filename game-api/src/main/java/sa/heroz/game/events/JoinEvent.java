@@ -1,7 +1,7 @@
 package sa.heroz.game.events;
 
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -12,7 +12,7 @@ public class JoinEvent implements Listener {
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onJoin(PlayerJoinEvent e) {
     try {
-      Player p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
+      HDPlayer p = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
       HerozTitle.show(p);
     } catch (Exception exception) {}
   }

@@ -15,7 +15,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 
-public class Player {
+public class HDPlayer {
   private static int LAST_ID = 0;
   
   private final int id;
@@ -28,7 +28,7 @@ public class Player {
   
   private PlayerMainForm mainForm;
   
-  public Player(org.bukkit.entity.Player player) throws APIException {
+  public HDPlayer(org.bukkit.entity.Player player) throws APIException {
     if (player == null)
       throw new APIException("(Object='Player') [ex='bukkit-player-null']"); 
     this.player = player;
@@ -76,7 +76,7 @@ public class Player {
     send("&c&lERR: &7" + message, args);
   }
   
-  public void teleport(Player player) {
+  public void teleport(HDPlayer player) {
     teleport(player.getLocation());
   }
   
@@ -134,7 +134,10 @@ public class Player {
   }
   
   public String getName() {
-    return getPlayer().getName();
+    String result = getPlayer().getName();
+    if (result == null)
+      return "Anonymous";
+    return result;
   }
   
   public String getDisplayName() {

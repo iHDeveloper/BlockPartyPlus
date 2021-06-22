@@ -2,13 +2,11 @@ package me.iHDeveloper.api.hologram;
 
 import java.util.ArrayList;
 import java.util.List;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.EntityLiving;
-import net.minecraft.server.v1_8_R3.Packet;
 import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
-import net.minecraft.server.v1_8_R3.World;
 import net.minecraft.server.v1_8_R3.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,15 +16,11 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public class Hologram {
-  private List<String> list;
-  
-  private double distance;
-  
   private final Location location;
-  
+  private final List<EntityArmorStand> entities;
   int c;
-  
-  private List<EntityArmorStand> entities;
+  private double distance;
+  private List<String> list;
   
   public Hologram(Location location, double distance) {
     this.location = location;
@@ -46,7 +40,7 @@ public class Hologram {
       double x = this.location.getX();
       double y = this.location.getY();
       double z = this.location.getZ();
-      EntityArmorStand entity = new EntityArmorStand((World)world, x, y, z);
+      EntityArmorStand entity = new EntityArmorStand(world, x, y, z);
       entity.setGravity(false);
       entity.setInvisible(true);
       entity.setCustomNameVisible(true);
@@ -91,7 +85,7 @@ public class Hologram {
     return this.list;
   }
   
-  public void showPlayer(Player player) {
+  public void showPlayer(HDPlayer player) {
     showPlayer(player.getPlayer());
   }
   
@@ -103,7 +97,7 @@ public class Hologram {
         return; 
       PacketPlayOutSpawnEntityLiving packet = new PacketPlayOutSpawnEntityLiving((EntityLiving)entity);
       CraftPlayer p = (CraftPlayer)player;
-      (p.getHandle()).playerConnection.sendPacket((Packet)packet);
+      (p.getHandle()).playerConnection.sendPacket(packet);
     } 
   }
   
@@ -112,15 +106,15 @@ public class Hologram {
       showPlayer(player); 
   }
   
-  public void hidePlayer(Player player) {
+  public void hidePlayer(HDPlayer player) {
     hidePlayer(player.getPlayer());
   }
   
   public void hidePlayer(Player player) {
     for (EntityArmorStand entity : this.entities) {
-      PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(new int[] { entity.getId() });
+      PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(entity.getId());
       CraftPlayer p = (CraftPlayer)player;
-      (p.getHandle()).playerConnection.sendPacket((Packet)packet);
+      (p.getHandle()).playerConnection.sendPacket(packet);
     } 
   }
   

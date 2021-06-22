@@ -3,7 +3,7 @@ package sa.heroz.blockpartypls.rounds;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -43,7 +43,7 @@ public class NormalRound extends Round {
     int c = randomWoolColor();
     Color color = Color.getById(c);
     for (GamePlayer gamePlayer : Game.getAlivePlayers()) {
-      Player p = gamePlayer.getPlayer();
+      HDPlayer p = gamePlayer.getPlayer();
       PlayerInventory inv = p.getInventory();
       inv.clear();
       for (int i = 0; i < 9; i++) {

@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.UUID;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.spectate.SpectateSystem;
 import me.iHDeveloper.api.thread.GameThreadManager;
 import org.bukkit.GameMode;
@@ -54,66 +54,66 @@ public class Game {
     topKillsHologram = new TopKillsHologram();
     topPointsHologram = new TopPointsHologram();
     HerozGame.start();
-    Console.log("Waiting for player [WAITING STATE]", new Object[0]);
+    Console.log("Waiting for player [WAITING STATE]");
   }
   
-  public static void add(Player player) {
-    Console.log("%s joined", new Object[] { player.getName() });
-    GamePlayer p = new GamePlayer(player);
-    base.put(player.getUUID(), p);
-    players.put(player.getUUID(), base.get(player.getUUID()));
+  public static void add(HDPlayer HDPlayer) {
+    Console.log("%s joined", HDPlayer.getName());
+    GamePlayer p = new GamePlayer(HDPlayer);
+    base.put(HDPlayer.getUUID(), p);
+    players.put(HDPlayer.getUUID(), base.get(HDPlayer.getUUID()));
     updateAll();
     Chat.broadcast(iHDeveloperAPI.format(Settings.join, 
-          new String[] { "displayname", "cplayers", "mplayers" }, new String[] { player.getDisplayName(), 
-            getAlivePlayers().size(), 
-            Settings.maxPlayers }), new Object[0]);
-    Console.log("%s joined", new Object[] { player.getName() });
+          new String[] { "displayname", "cplayers", "mplayers" }, new String[] { HDPlayer.getDisplayName(),
+            "" + getAlivePlayers().size(),
+            "" + Settings.maxPlayers }));
+    Console.log("%s joined", HDPlayer.getName());
     if (getState() == GameState.WAITING) {
-      player.getPlayer().setLevel(0);
-      player.getPlayer().setExp(0.0F);
+      HDPlayer.getPlayer().setLevel(0);
+      HDPlayer.getPlayer().setExp(0.0F);
       if (Settings.lobby != null) {
-        player.getPlayer().teleport(Settings.lobby);
+        HDPlayer.getPlayer().teleport(Settings.lobby);
       } else {
-        player.sendError("Not found the lobby location", new Object[0]);
+        HDPlayer.sendError("Not found the lobby location");
       } 
       if (getAlivePlayers().size() >= Settings.maxPlayers)
         start(); 
     } 
   }
   
-  public static void eliminate(Player player, Location fallLocation) {
-    if (!players.containsKey(player.getUUID()))
+  public static void eliminate(HDPlayer HDPlayer, Location fallLocation) {
+    if (!players.containsKey(HDPlayer.getUUID()))
       return; 
-    players.remove(player.getUUID());
-    spectators.put(player.getUUID(), base.get(player.getUUID()));
-    String reason = "Fall down";
-    Player damager = GameEvents.getDamager(player.getUUID());
+    players.remove(HDPlayer.getUUID());
+    spectators.put(HDPlayer.getUUID(), base.get(HDPlayer.getUUID()));
+    String reason;
+    HDPlayer damager = GameEvents.getDamager(HDPlayer.getUUID());
     if (damager == null) {
       reason = "Fall down";
     } else {
       GamePlayer gp = players.get(damager.getUUID());
       reason = "Killed by " + damager.getName();
-      gp.giveKill("Kill " + player.getName());
-      gp.givePoints(150, "Kill " + player.getName());
+      gp.giveKill("Kill " + HDPlayer.getName());
+      gp.givePoints(150, "Kill " + HDPlayer.getName());
     } 
-    player.setGameMode(GameMode.SPECTATOR);
-    player.teleport(Settings.lobby);
+    HDPlayer.setGameMode(GameMode.SPECTATOR);
+    HDPlayer.teleport(Settings.lobby);
     Chat.broadcast(iHDeveloperAPI.format(Settings.eliminated, 
-          new String[] { "displayname", "round", "reason" }, new String[] { player.getDisplayName(), thread.getRound().getId(), reason }), new Object[0]);
+          new String[] { "displayname", "round", "reason" }, new String[] { HDPlayer.getDisplayName(), "" + thread.getRound().getId(), reason }));
     for (GamePlayer gamePlayer : getAlivePlayers())
       gamePlayer.givePoints(25, "Someone died"); 
-    RIPEntity entity = new RIPEntity(player, fallLocation);
+    RIPEntity entity = new RIPEntity(HDPlayer, fallLocation);
     entity.showAll();
     if (getAlivePlayers().size() <= 1) {
       setState(GameState.FINISH);
       GamePlayer winner = (new LinkedList<>(getAlivePlayers())).get(0);
       Game.winner = winner;
       Chat.broadcast(iHDeveloperAPI.format(Settings.win, 
-            new String[] { "displayname" }, new String[] { winner.getPlayer().getDisplayName() }), new Object[0]);
+            new String[] { "displayname" }, new String[] { winner.getPlayer().getDisplayName() }));
       for (GamePlayer gamePlayer : getAlivePlayers())
         players.remove(gamePlayer.getPlayer().getUUID()); 
       for (GamePlayer gamePlayer : getAllPlayers()) {
-        Player p = gamePlayer.getPlayer();
+        HDPlayer p = gamePlayer.getPlayer();
         p.clearInv();
         p.setGameMode(GameMode.ADVENTURE);
         p.getPlayer().setExp(0.0F);
@@ -121,7 +121,7 @@ public class Game {
         try {
           p.getPlayer().teleport(Settings.lobby);
         } catch (NullPointerException ex) {
-          p.sendError("Not found the lobby location", new Object[0]);
+          p.sendError("Not found the lobby location");
         } 
         SpectateSystem.reset();
       } 
@@ -129,35 +129,37 @@ public class Game {
     updateAll();
   }
   
-  public static void onQuit(Player player) {
-    if (!players.containsKey(player.getUUID()))
+  public static void onQuit(HDPlayer HDPlayer) {
+    if (!players.containsKey(HDPlayer.getUUID()))
       return; 
-    spectators.remove(player.getUUID());
-    players.remove(player.getUUID());
-    base.remove(player.getUUID());
-    StatsHologram h = hologramsStats.get(player.getUUID());
+    spectators.remove(HDPlayer.getUUID());
+    players.remove(HDPlayer.getUUID());
+    base.remove(HDPlayer.getUUID());
+    StatsHologram h = hologramsStats.get(HDPlayer.getUUID());
     h.hideAll();
-    hologramsStats.remove(player.getUUID());
+    hologramsStats.remove(HDPlayer.getUUID());
     Chat.broadcast(iHDeveloperAPI.format(Settings.left, 
-          new String[] { "displayname" }, new String[] { player.getDisplayName() }), new Object[0]);
+          new String[] { "displayname" }, new String[] { HDPlayer.getDisplayName() }));
     if (getState() != GameState.STARTING)
       return; 
     if (players.size() < Settings.maxPlayers / 2) {
       Chat.broadcast(iHDeveloperAPI.format(Settings.no_enough, 
             new String[0], 
-            new String[0]), new Object[0]);
+            new String[0]));
       try {
         startGTM.stop();
-      } catch (NullPointerException nullPointerException) {}
+      } catch (NullPointerException exception) {
+        exception.printStackTrace();
+      }
       setState(GameState.WAITING);
     } 
     updateAll();
   }
   
-  public static void startByAdmin(Player player) {
+  public static void startByAdmin(HDPlayer HDPlayer) {
     start();
     Chat.broadcast(iHDeveloperAPI.format(Settings.start_by_admin, 
-          new String[] { "displayname" }, new String[] { player.getDisplayName() }), new Object[0]);
+          new String[] { "displayname" }, new String[] { HDPlayer.getDisplayName() }));
   }
   
   public static GameThreadManager startGTM = null;
@@ -169,7 +171,7 @@ public class Game {
     startGTM = new GameThreadManager(start);
     startGTM.start();
   }
-  
+
   public static void startGame() {
     setState(GameState.IN_GAME);
     updateAll();
@@ -195,7 +197,9 @@ public class Game {
       GameScoreboard sb = p.getScoreboard();
       try {
         sb.update();
-      } catch (NullPointerException nullPointerException) {}
+      } catch (NullPointerException exception) {
+        exception.printStackTrace();
+      }
       try {
         StatsHologram stats = hologramsStats.get(p.getPlayer().getUUID());
         stats.update();
@@ -226,7 +230,7 @@ public class Game {
   }
   
   public static GamePlayerRole getPlayerRole(GamePlayer player) {
-    Player p = player.getPlayer();
+    HDPlayer p = player.getPlayer();
     if (getState() == GameState.FINISH)
       try {
         if (p.getUUID().equals(winner.getPlayer().getUUID()))

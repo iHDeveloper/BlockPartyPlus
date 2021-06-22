@@ -16,9 +16,9 @@ public class PlayerMainForm extends Form {
   
   private final Map<Integer, ComponentItem> items;
   
-  public PlayerMainForm(Player player) {
-    super(player.getInventory().getSize(), player.getInventory().getTitle());
-    this.inv = player.getInventory();
+  public PlayerMainForm(HDPlayer HDPlayer) {
+    super(HDPlayer.getInventory().getSize(), HDPlayer.getInventory().getTitle());
+    this.inv = HDPlayer.getInventory();
     this.items = new HashMap<>();
   }
   
@@ -39,12 +39,12 @@ public class PlayerMainForm extends Form {
     } 
   }
   
-  public void interact(PlayerInteractEvent e, Player player, ItemStack itemStack) {
+  public void interact(PlayerInteractEvent e, HDPlayer HDPlayer, ItemStack itemStack) {
     for (ComponentItem item : getItems()) {
       if (item.getText().equals(itemStack.getItemMeta().getDisplayName())) {
         try {
           item.getListener().onInteract(e);
-          Debug.log("Player Main Form Interact [name='%s',uuid='%s',item='%s']", new Object[] { player.getName(), player.getUUID(),
+          Debug.log("Player Main Form Interact [name='%s',uuid='%s',item='%s']", new Object[] { HDPlayer.getName(), HDPlayer.getUUID(),
                 itemStack.getItemMeta().getDisplayName() });
         } catch (Exception exception) {}
         return;

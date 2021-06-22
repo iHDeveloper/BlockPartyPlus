@@ -4,7 +4,7 @@ import me.iHDeveloper.api.command.Command;
 import me.iHDeveloper.api.command.CommandInfo;
 import me.iHDeveloper.api.hologram.Hologram;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.command.CommandSender;
 
 @CommandInfo(commands = {"hologram"}, args = {"create", "delete", "edit", "info"}, permissions = {}, isOp = true)
@@ -40,7 +40,7 @@ public class HologramCommand implements Command {
   
   public void onConsole(CommandSender sender, String arg, String[] args) {}
   
-  public void onPlayer(Player sender, String arg, String[] args) {
+  public void onPlayer(HDPlayer sender, String arg, String[] args) {
     if (arg.equalsIgnoreCase("create")) {
       if (args.length == 2) {
         String id = args[0];

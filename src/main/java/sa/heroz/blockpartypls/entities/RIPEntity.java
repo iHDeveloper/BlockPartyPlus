@@ -4,7 +4,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.UUID;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import net.minecraft.server.v1_8_R3.Entity;
 import net.minecraft.server.v1_8_R3.EntityArmorStand;
 import net.minecraft.server.v1_8_R3.EntityLiving;
@@ -13,7 +13,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_8_R3.PacketPlayOutSpawnEntityLiving;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 import net.minecraft.server.v1_8_R3.Vector3f;
-import net.minecraft.server.v1_8_R3.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -31,26 +30,26 @@ import org.bukkit.inventory.meta.SkullMeta;
 public class RIPEntity {
   private static final ArrayList<RIPEntity> entities = new ArrayList<>();
   
-  private final Player player;
+  private final HDPlayer player;
   
   private final Location location;
   
   private final EntityArmorStand e;
   
-  public static void destoryAllEntities() {
+  public static void destroyAllEntities() {
     for (RIPEntity entity : entities) {
       entity.hideAll();
       entity.die();
     } 
   }
   
-  public RIPEntity(Player player, Location location) {
+  public RIPEntity(HDPlayer player, Location location) {
     this.player = player;
     this.location = location;
-    this.e = new EntityArmorStand((World)getCraftWorld().getHandle(), getX(), getY(), getZ());
+    this.e = new EntityArmorStand(getCraftWorld().getHandle(), getX(), getY(), getZ());
     this.e.setArms(true);
     this.e.setBasePlate(true);
-    this.e.setCustomName(iHDeveloperAPI.color("&c&lRIP &8&l| &f&l%s", new Object[] { getOwnerName() }));
+    this.e.setCustomName(iHDeveloperAPI.color("&c&lRIP &8&l| &f&l%s", getOwnerName()));
     this.e.setCustomNameVisible(true);
     this.e.setGravity(true);
     this.e.setSmall(false);
@@ -63,17 +62,17 @@ public class RIPEntity {
     ItemStack playerHead = new ItemStack(Material.SKULL_ITEM, 1, (short)3);
     SkullMeta skull = (SkullMeta)playerHead.getItemMeta();
     skull.setOwner(getOwnerName());
-    playerHead.setItemMeta((ItemMeta)skull);
+    playerHead.setItemMeta(skull);
     ItemStack chestplateArmorItem = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
     ItemStack leggingsArmorItem = new ItemStack(Material.LEATHER_LEGGINGS, 1);
     ItemStack bootsArmorItem = new ItemStack(Material.LEATHER_BOOTS, 1);
     LeatherArmorMeta chestplateArmorMeta = getLeatherArmorMeta(chestplateArmorItem);
     LeatherArmorMeta leggingsArmorMeta = getLeatherArmorMeta(leggingsArmorItem);
     LeatherArmorMeta bootsArmorMeta = getLeatherArmorMeta(bootsArmorItem);
-    chestplateArmorItem.setItemMeta((ItemMeta)chestplateArmorMeta);
-    leggingsArmorItem.setItemMeta((ItemMeta)leggingsArmorMeta);
-    bootsArmorItem.setItemMeta((ItemMeta)bootsArmorMeta);
-    getCraftWorld().getHandle().addEntity((Entity)this.e);
+    chestplateArmorItem.setItemMeta(chestplateArmorMeta);
+    leggingsArmorItem.setItemMeta(leggingsArmorMeta);
+    bootsArmorItem.setItemMeta(bootsArmorMeta);
+    getCraftWorld().getHandle().addEntity(this.e);
     ArmorStand armorStand = (ArmorStand)this.e.getBukkitEntity();
     armorStand.setHelmet(playerHead);
     armorStand.setChestplate(chestplateArmorItem);
@@ -95,7 +94,7 @@ public class RIPEntity {
   }
   
   public void die() {
-    getCraftWorld().getHandle().removeEntity((Entity)this.e);
+    getCraftWorld().getHandle().removeEntity(this.e);
   }
   
   public void showAll() {
@@ -106,8 +105,8 @@ public class RIPEntity {
   public void showPlayer(Player player) {
     CraftPlayer p = (CraftPlayer)player;
     PlayerConnection connection = (p.getHandle()).playerConnection;
-    PacketPlayOutSpawnEntityLiving spawn = new PacketPlayOutSpawnEntityLiving((EntityLiving)this.e);
-    connection.sendPacket((Packet)spawn);
+    PacketPlayOutSpawnEntityLiving spawn = new PacketPlayOutSpawnEntityLiving(this.e);
+    connection.sendPacket(spawn);
   }
   
   public void hideAll() {
@@ -118,8 +117,8 @@ public class RIPEntity {
   public void hidePlayer(Player player) {
     CraftPlayer p = (CraftPlayer)player;
     PlayerConnection connection = (p.getHandle()).playerConnection;
-    PacketPlayOutEntityDestroy destory = new PacketPlayOutEntityDestroy(new int[] { this.e.getId() });
-    connection.sendPacket((Packet)destory);
+    PacketPlayOutEntityDestroy destory = new PacketPlayOutEntityDestroy(this.e.getId());
+    connection.sendPacket(destory);
   }
   
   public Location getLocation() {
@@ -146,7 +145,7 @@ public class RIPEntity {
     return getLocation().getZ();
   }
   
-  public Player getPlayer() {
+  public HDPlayer getPlayer() {
     return this.player;
   }
   

@@ -2,7 +2,7 @@ package sa.heroz.blockpartypls.commands;
 
 import me.iHDeveloper.api.command.Command;
 import me.iHDeveloper.api.command.CommandInfo;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.thread.GameThreadManager;
 import org.bukkit.command.CommandSender;
 import sa.heroz.blockpartypls.game.Game;
@@ -15,7 +15,7 @@ public class RestartCommand implements Command {
   
   public void onConsole(CommandSender sender, String arg, String[] args) {}
   
-  public void onPlayer(Player sender, String arg, String[] args) {
+  public void onPlayer(HDPlayer sender, String arg, String[] args) {
     Game.setState(GameState.RESTARTING);
     Game.updateAll();
     this.thread.run();

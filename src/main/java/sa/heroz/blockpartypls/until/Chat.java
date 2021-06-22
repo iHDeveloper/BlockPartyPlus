@@ -1,7 +1,7 @@
 package sa.heroz.blockpartypls.until;
 
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.Bukkit;
 
 public class Chat {
@@ -11,7 +11,7 @@ public class Chat {
     Bukkit.broadcastMessage(iHDeveloperAPI.color(message, args));
   }
   
-  public static void send(Player player, String message, Object... args) {
-    player.send(iHDeveloperAPI.color(String.valueOf(prefix) + " " + message, args), new Object[0]);
+  public static void send(HDPlayer HDPlayer, String message, Object... args) {
+    HDPlayer.send(iHDeveloperAPI.color(String.valueOf(prefix) + " " + message, args), new Object[0]);
   }
 }

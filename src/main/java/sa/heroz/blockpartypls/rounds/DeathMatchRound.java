@@ -3,7 +3,7 @@ package sa.heroz.blockpartypls.rounds;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -43,7 +43,7 @@ public class DeathMatchRound extends Round {
     int c = randomBlock();
     BlockEnum b = BlockEnum.getById(c);
     for (GamePlayer gamePlayer : Game.getAlivePlayers()) {
-      Player player = gamePlayer.getPlayer();
+      HDPlayer player = gamePlayer.getPlayer();
       PlayerInventory inv = player.getInventory();
       inv.clear();
       for (int i = 0; i < 9; i++) {

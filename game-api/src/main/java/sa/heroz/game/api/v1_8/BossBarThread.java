@@ -2,7 +2,7 @@ package sa.heroz.game.api.v1_8;
 
 import java.security.SecureRandom;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.thread.GameThread;
 import me.iHDeveloper.api.thread.GameThreadManager;
 import me.iHDeveloper.api.thread.GameThreadOptions;
@@ -43,26 +43,26 @@ public class BossBarThread implements GameThread {
   
   private void reloadAll() {
     for (Player player : Bukkit.getOnlinePlayers()) {
-      Player p = iHDeveloperAPI.getPlayer(player.getName());
+      HDPlayer p = iHDeveloperAPI.getPlayer(player.getName());
       reload(p);
     } 
   }
   
   private static final SecureRandom ran = new SecureRandom();
   
-  private void reload(Player p) {
+  private void reload(HDPlayer p) {
     String playing = "&e&lPLAYING";
     String gameName = "&f&l" + HerozGame.getName();
     String on = "&e&lON";
     String[] colors = { "b", "a", "6", "9", "c", "d" };
-    String mcHerozSA = "MC.HEROZ.SA";
+    String link = "MC.HEROZ.SA";
     int color = ran.nextInt(colors.length);
-    String text = String.valueOf(playing) + " " + gameName + " " + on + " &" + colors[color] + "&l" + mcHerozSA;
+    String text = playing + " " + gameName + " " + on + " &" + colors[color] + "&l" + link;
     BossBarAPI.removeAllBars(p.getPlayer());
-    displayBossBar(p, iHDeveloperAPI.color(text, new Object[0]));
+    displayBossBar(p, iHDeveloperAPI.color(text));
   }
   
-  private void displayBossBar(Player p, String text) {
+  private void displayBossBar(HDPlayer p, String text) {
     BossBarAPI.addBar(p.getPlayer(), (BaseComponent)new TextComponent(text), BossBarAPI.Color.PURPLE, BossBarAPI.Style.NOTCHED_20, 1.0F, new BossBarAPI.Property[0]);
   }
 }

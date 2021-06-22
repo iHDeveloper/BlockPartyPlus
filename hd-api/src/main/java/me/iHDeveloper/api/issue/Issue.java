@@ -8,16 +8,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Random;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 
 public class Issue {
   private final Exception exception;
   
-  private final Player reporter;
+  private final HDPlayer reporter;
   
   private final String id;
   
-  public Issue(Player reporter, Exception exception) {
+  public Issue(HDPlayer reporter, Exception exception) {
     this.exception = exception;
     this.reporter = reporter;
     this.id = shuffle();
@@ -37,7 +37,7 @@ public class Issue {
     } 
   }
   
-  public Player getPlayer() {
+  public HDPlayer getPlayer() {
     return this.reporter;
   }
   
@@ -67,7 +67,7 @@ public class Issue {
     return id;
   }
   
-  public static void log(Player p, String id) {
+  public static void log(HDPlayer p, String id) {
     try {
       File file = new File(iHDeveloperAPI.getDataFolder() + "/issues/" + id + ".txt");
       BufferedReader in = new BufferedReader(new FileReader(file));

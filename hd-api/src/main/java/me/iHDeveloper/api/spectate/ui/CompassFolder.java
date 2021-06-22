@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.spectate.SpectateSystem;
 import me.iHDeveloper.api.ui.ComponentItemEvent;
 import me.iHDeveloper.api.ui.Folder;
@@ -21,8 +21,8 @@ public class CompassFolder extends Folder implements ComponentItemEvent {
     super(Material.COMPASS, 1);
     setDisplayName("&8&l-|- &f&lCompass &8&l-|-");
     List<String> list = new ArrayList<>();
-    list.add(iHDeveloperAPI.color("&7Click to teleport to", new Object[0]));
-    list.add(iHDeveloperAPI.color("&7any player in the game.", new Object[0]));
+    list.add(iHDeveloperAPI.color("&7Click to teleport to"));
+    list.add(iHDeveloperAPI.color("&7any player in the game."));
     setLore(list);
     setNumber(1);
   }
@@ -32,16 +32,17 @@ public class CompassFolder extends Folder implements ComponentItemEvent {
   }
   
   public void onInteract(PlayerInteractEvent e) {
-    Player clicker = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
+    HDPlayer clicker = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
     if (!SpectateSystem.is(clicker))
       return; 
     Form form = new Form(54, "&7Click to spectate");
     List<PlayerButton> buttons = new ArrayList<>();
     for (Player player : Bukkit.getOnlinePlayers()) {
-      Player p = iHDeveloperAPI.getPlayer(player.getName());
+      HDPlayer p = iHDeveloperAPI.getPlayer(player.getName());
       if (!SpectateSystem.is(p)) {
         buttons.add(new PlayerButton(p));
-        Debug.log("added " + p.getName(), new Object[0]);
+        assert p != null;
+        Debug.log("added " + p.getName());
       } 
     } 
     for (int i = 0; i < 9; ) {

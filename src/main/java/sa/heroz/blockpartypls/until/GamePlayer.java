@@ -2,13 +2,13 @@ package sa.heroz.blockpartypls.until;
 
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import me.iHDeveloper.api.player.Player;
+import me.iHDeveloper.api.player.HDPlayer;
 import sa.heroz.blockpartypls.game.Game;
 import sa.heroz.blockpartypls.game.GamePlayerRole;
 import sa.heroz.blockpartypls.scoreboard.GameScoreboard;
 
 public class GamePlayer {
-  private final Player player;
+  private final HDPlayer HDPlayer;
   
   private GameScoreboard scoreboard;
   
@@ -16,8 +16,8 @@ public class GamePlayer {
   
   private int points;
   
-  public GamePlayer(Player player) {
-    this.player = player;
+  public GamePlayer(HDPlayer HDPlayer) {
+    this.HDPlayer = HDPlayer;
     init();
   }
   
@@ -27,8 +27,8 @@ public class GamePlayer {
     this.points = 0;
   }
   
-  public Player getPlayer() {
-    return this.player;
+  public HDPlayer getPlayer() {
+    return this.HDPlayer;
   }
   
   public GameScoreboard getScoreboard() {
@@ -49,17 +49,17 @@ public class GamePlayer {
   
   public void giveKill(String reason) {
     this.kills++;
-    Debug.log("Updated Kills in %s to %s", new Object[] { getPlayer().getName(), Integer.valueOf(this.kills) });
+    Debug.log("Updated Kills in %s to %s", getPlayer().getName(), this.kills);
     getPlayer().send(iHDeveloperAPI.format(Settings.kill, 
-          new String[] { "reason" }, new String[] { reason }), new Object[0]);
+          new String[] { "reason" }, new String[] { reason }));
     getScoreboard().update();
   }
   
   public void givePoints(int points, String reason) {
     this.points += points;
-    Debug.log("Updated Points in %s to %s", new Object[] { getPlayer().getName(), Integer.valueOf(points) });
+    Debug.log("Updated Points in %s to %s", getPlayer().getName(), points);
     getPlayer().send(iHDeveloperAPI.format(Settings.points, 
-          new String[] { "points", "reason" }, new String[] { points, reason }), new Object[0]);
+          new String[] { "points", "reason" }, new String[] { "" + points, reason }));
     getScoreboard().update();
   }
 }
