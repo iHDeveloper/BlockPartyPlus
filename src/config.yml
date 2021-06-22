@@ -1,0 +1,29 @@
+
+#ONLY FOR DEV
+debug: false
+
+#settings
+max-players: 20
+
+#Messages
+messages:
+ manage:
+  start: "&aThe game is starting &b| &f%displayname%"
+ general:
+  already: "&cThe game has been already started!"
+  full: "&cThe game is full!"
+ game:
+  join: "&7[&a%cplayers%&e/&c%mplayers%&7] &9%displayname%"
+  left: "&7[&c-&7] &9%displayname%"
+  eliminated: "&7[&cEliminated&7] &9%displayname% &7(%reason%)"
+  countdown: "&7[&e%sec%&csec&7] &6To start!"
+  no_enough: "&7[&cERR&7] &cNo enough players to start!"
+  color: "&7[&eBlock&7] &b%block_name%"
+  win: "&e&lTHE END! &eThe winner is &9%displayname%."
+ stats:
+  points: "&e+%points% &6BlockParty+ Points (%reason%)"
+  kill: "&e+1 &cBlockParty+ Kill (%reason%)"
+
+settings:
+ general:
+  prefix: ""

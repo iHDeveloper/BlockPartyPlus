@@ -1,0 +1,32 @@
+name: BlockPartyPls
+version: 0.1
+main: sa.heroz.blockpartypls.Main
+author: "HerozSA (iHDeveloper)"
+
+loadbefore: [HerozGameAPI, iHDeveloperAPI]
+depend: [HerozGameAPI, iHDeveloperAPI]
+softdepend: [HerozGameAPI, iHDeveloperAPI]
+
+commands:
+ issue:
+  usage: /<command>
+  description: for issues
+ game:
+  usage: /<command>
+  description: for game
+ build:
+  usage: /<command>
+  description: For build mode
+  aliases: b
+ herozrestart:
+  usage: /<command>
+  description: For restart the server
+  aliases: hr
+ hologram:
+  usage: /<command>
+  description: For manage the hologram in the server
+  aliases: [holo,h]
+ stats:
+  usage: /<command>
+  description: For see the player stats
+  aliases: [s,records,mystats,profile]
