@@ -40,12 +40,19 @@ dependencies {
 
 allprojects {
     group = "me.ihdeveloper"
-    version = "0.2"
 
     if (project != rootProject) {
         apply(plugin = "java")
         apply(plugin = "de.undercouch.download")
         apply(plugin = "com.github.johnrengelman.shadow")
+
+        project.version = when(project.name) {
+            "ihdeveloper-legacy-api" -> "1.0"
+            "legacy-game-api" -> "1.0"
+            else -> "0.0"
+        }
+    } else {
+        version = "0.2"
     }
 
     repositories {
@@ -73,6 +80,10 @@ allprojects {
     }
 
     tasks {
+        jar {
+            archiveFileName.set("scratch-${archiveBaseName.get()}-${archiveVersion.get()}.jar")
+        }
+
         shadowJar {
             from("LICENSE")
 
