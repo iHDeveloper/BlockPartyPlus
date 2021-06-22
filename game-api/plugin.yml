@@ -1,0 +1,8 @@
+name: HerozGameAPI
+version: 1.0
+author: iHDeveloper
+main: sa.heroz.game.Main
+
+loadbefore: [iHDeveloperAPI]
+depend: [iHDeveloperAPI]
+softdepend: [iHDeveloperAPI]
