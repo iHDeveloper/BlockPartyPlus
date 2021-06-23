@@ -25,3 +25,10 @@ So, I did as below
 
 **Note:** I will include the original jars in a folder called `original/` in case you wanted to take a look at my legacy code in **2017**.
 
+## How to compile
+```shell
+./gradlew shadowJar
+```
+You will find the compiled jars in the `build` directory.
+
+**Note:** There's no different between the jars with or without `scratch-`.
