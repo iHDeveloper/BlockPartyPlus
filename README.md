@@ -2,6 +2,12 @@
 It's a revamped version of HiveMC BlockParty.
 It uses a 3D arena instead of a 2D floor and includes different entertainment modes!
 
+## Mistakes I made
+This will be a list of mistakes I made when making this game.
+It will only include the solved mistakes for now.
+
+**Solved nothing for now! (I will update this on every fix)**
+
 ## Backstory
 I started working on this game since I was 14 years old (2017). I didn't have a lot of experience in Java and game development.
 But, this game is by far one of the best projects I have done when I started in game development.
@@ -15,7 +21,7 @@ In 2021, I tried to re-alive the project and got it working with the map too! \o
 So, I decided to make a revamped version of it to, solve its bugs, and make minor improvements. 😄
 
 ## How I revamped the project?
-I had the source code on my old laptop but I was too lazy to get them from there.
+I had the source code on my old laptop, but I was too lazy to get them from there.
 So, I did as below
 
 1. Decompile the original jars
@@ -32,3 +38,11 @@ So, I did as below
 You will find the compiled jars in the `build` directory.
 
 **Note:** There's no different between the jars with or without `scratch-`.
+
+## Modules
+| Name | Path | Description |
+|------|------|-------------|
+| Game API (Legacy) | `game-api/` | API that was designed to identify games on the network |
+| iHDeveloper API (Legacy) | `hd-api/` | Library to help create some functionality in games faster |
+| BlockParty+ Source Code | `src/` | The main source code to run the game! |
+
