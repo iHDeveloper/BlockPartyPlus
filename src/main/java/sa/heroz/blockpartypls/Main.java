@@ -5,7 +5,6 @@ import me.iHDeveloper.api.commands.HologramCommand;
 import me.iHDeveloper.api.exceptions.APIException;
 import me.iHDeveloper.api.iHDeveloperAPI;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import sa.heroz.blockpartypls.commands.BuildCommand;
@@ -29,10 +28,11 @@ import sa.heroz.blockpartypls.until.Console;
 import sa.heroz.blockpartypls.until.Settings;
 import sa.heroz.game.HerozGame;
 
+@SuppressWarnings("deprecation")
 public class Main extends JavaPlugin {
   public void onEnable() {
     try {
-      Console.log("Loading The Game [LOADING STATE]", new Object[0]);
+      Console.log("Loading The Game [LOADING STATE]");
       iHDeveloperAPI.setPlugin(this);
       try {
         if (!HerozGame.isStarted()) {
@@ -44,41 +44,39 @@ public class Main extends JavaPlugin {
           HerozGame.setTitle(true);
         } 
       } catch (Exception ex) {
-        Console.log("&cThe game api doesn't loaded!", new Object[0]);
+        Console.log("&cThe game api doesn't loaded!");
         ex.printStackTrace();
         setEnabled(false);
       } 
-      Bukkit.getScheduler().runTask((Plugin)this, new Runnable() {
-            public void run() {
-              Console.log("&eLoading config...", new Object[0]);
-              Settings.load();
-              Console.log("&eLoading game...", new Object[0]);
-              Game.host();
-            }
-          });
+      Bukkit.getScheduler().runTask(this, () -> {
+        Console.log("&eLoading config...");
+        Settings.load();
+        Console.log("&eLoading game...");
+        Game.host();
+      });
       registerEvents();
       registerCommands();
-      Console.log("&aEnabled!", new Object[0]);
+      Console.log("&aEnabled!");
     } catch (Exception ex) {
       ex.printStackTrace();
       setEnabled(false);
-      Console.log("&cDisabled! ||>> &cERR: &bAPI Catch!", new Object[0]);
+      Console.log("&cDisabled! ||>> &cERR: &bAPI Catch!");
     } 
   }
   
   private void registerEvents() {
     PluginManager pm = iHDeveloperAPI.getPluginManager();
-    pm.registerEvents(new LoginEvent(), (Plugin)this);
-    pm.registerEvents(new JoinEvent(), (Plugin)this);
-    pm.registerEvents(new QuitEvent(), (Plugin)this);
-    pm.registerEvents(new WeatherChangeEvent(), (Plugin)this);
-    pm.registerEvents(new DamageEvent(), (Plugin)this);
-    pm.registerEvents(new MoveEvent(), (Plugin)this);
-    pm.registerEvents(new ChatEvent(), (Plugin)this);
-    pm.registerEvents(new ArmorStandProtectEvent(), (Plugin)this);
-    pm.registerEvents(new PingEvent(), (Plugin)this);
-    pm.registerEvents(new GameModeChangeEvent(), (Plugin)this);
-    pm.registerEvents(new BlocksEvent(), (Plugin)this);
+    pm.registerEvents(new LoginEvent(), this);
+    pm.registerEvents(new JoinEvent(), this);
+    pm.registerEvents(new QuitEvent(), this);
+    pm.registerEvents(new WeatherChangeEvent(), this);
+    pm.registerEvents(new DamageEvent(), this);
+    pm.registerEvents(new MoveEvent(), this);
+    pm.registerEvents(new ChatEvent(), this);
+    pm.registerEvents(new ArmorStandProtectEvent(), this);
+    pm.registerEvents(new PingEvent(), this);
+    pm.registerEvents(new GameModeChangeEvent(), this);
+    pm.registerEvents(new BlocksEvent(), this);
   }
   
   private void registerCommands() {
@@ -94,9 +92,9 @@ public class Main extends JavaPlugin {
   
   public void onDisable() {
     Settings.save();
-    Console.log("&eDestorying all holograms...", new Object[0]);
+    Console.log("&eDestroying all holograms...");
     StatsHologram.destoryAllHolograms();
     HologramCommand.destoryAllHolograms();
-    Console.log("&cDisabled!", new Object[0]);
+    Console.log("&cDisabled!");
   }
 }

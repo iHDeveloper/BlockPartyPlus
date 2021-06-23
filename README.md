@@ -6,7 +6,9 @@ It uses a 3D arena instead of a 2D floor and includes different entertainment mo
 This will be a list of mistakes I made when making this game.
 It will only include the solved mistakes for now.
 
-**Solved nothing for now! (I will update this on every fix)**
+- I misspelled `destroy` with `distory` **a lot**.
+- I misspelled `becuase` with `becuase` 🤦‍♂️
+
 
 ## Backstory
 I started working on this game since I was 14 years old (2017). I didn't have a lot of experience in Java and game development.
@@ -44,5 +46,5 @@ You will find the compiled jars in the `build` directory.
 |------|------|-------------|
 | Game API (Legacy) | `game-api/` | API that was designed to identify games on the network |
 | iHDeveloper API (Legacy) | `hd-api/` | Library to help create some functionality in games faster |
-| BlockParty+ Source Code | `src/` | The main source code to run the game! |
+| BlockParty+ Source Code (Core) | `src/` | The main source code to run the game! |
 
