@@ -12,16 +12,21 @@ import sa.heroz.blockpartypls.until.Settings;
 import sa.heroz.blockpartypls.until.TempSettings;
 
 public class MoveEvent implements Listener {
+
+  @SuppressWarnings("unused")
   @EventHandler(priority = EventPriority.HIGHEST)
   public void onMove(PlayerMoveEvent e) {
     HDPlayer HDPlayer = iHDeveloperAPI.getPlayer(e.getPlayer().getName());
+    assert HDPlayer != null;
     if (Game.getState() == GameState.IN_GAME) {
       try {
-        int pos1 = Settings.pos1.getBlockY() - 1;
+        int pos1 = Settings.pos1.getBlockY() - 2;
         int pos2 = HDPlayer.getLocation().getBlockY();
         if (pos2 < pos1)
           Game.eliminate(HDPlayer, HDPlayer.getLocation());
-      } catch (Exception exception) {}
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
     } else if (Game.getState() == GameState.WAITING || 
       Game.getState() == GameState.STARTING) {
       if (!TempSettings.build)
@@ -30,7 +35,10 @@ public class MoveEvent implements Listener {
           int y2 = HDPlayer.getLocation().getBlockY();
           if (y2 < y1)
             HDPlayer.getPlayer().teleport(Settings.lobby);
-        } catch (Exception exception) {} 
+        } catch (Exception exception) {
+          exception.printStackTrace();
+        }
     } 
   }
+
 }
