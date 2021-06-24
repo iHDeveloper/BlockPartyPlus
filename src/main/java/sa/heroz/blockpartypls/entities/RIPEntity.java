@@ -51,7 +51,7 @@ public class RIPEntity {
     this.e.setBasePlate(true);
     this.e.setCustomName(iHDeveloperAPI.color("&c&lRIP &8&l| &f&l%s", getOwnerName()));
     this.e.setCustomNameVisible(true);
-    this.e.setGravity(true);
+    this.e.setGravity(false); // WARNING: the gravity flag is reversed!
     this.e.setSmall(false);
     this.e.setHeadPose(new Vector3f(330.0F, 30.0F, 0.0F));
     this.e.setBodyPose(new Vector3f(0.0F, 0.0F, 0.0F));
