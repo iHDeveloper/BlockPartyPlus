@@ -7,7 +7,7 @@ This will be a list of mistakes I made when making this game.
 It will only include the solved mistakes for now.
 
 - I misspelled `destroy` with `distory` **a lot**.
-- I misspelled `becuase` with `becuase` 🤦‍♂️
+- I misspelled `because` with `becuase` 🤦‍♂️
 
 
 ## Backstory

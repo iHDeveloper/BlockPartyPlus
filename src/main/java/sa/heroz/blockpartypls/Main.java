@@ -94,7 +94,7 @@ public class Main extends JavaPlugin {
     Settings.save();
     Console.log("&eDestroying all holograms...");
     StatsHologram.destoryAllHolograms();
-    HologramCommand.destoryAllHolograms();
+    HologramCommand.destroyAllHolograms();
     Console.log("&cDisabled!");
   }
 }

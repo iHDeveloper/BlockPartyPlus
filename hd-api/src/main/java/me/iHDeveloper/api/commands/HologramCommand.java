@@ -10,12 +10,8 @@ import org.bukkit.command.CommandSender;
 @CommandInfo(commands = {"hologram"}, args = {"create", "delete", "edit", "info"}, permissions = {}, isOp = true)
 public class HologramCommand implements Command {
   private static HologramCommand instance;
-  
-  public static HologramCommand getInstance() {
-    return instance;
-  }
-  
-  public static void destoryAllHolograms() {
+
+  public static void destroyAllHolograms() {
     if (instance == null)
       return; 
     for (Hologram hologram : Manager.holograms.values()) {
@@ -48,21 +44,15 @@ public class HologramCommand implements Command {
         try {
           double d = Double.parseDouble(distance);
           Manager.create(id, sender.getLocation(), d);
-          sender.send("&aDone! &eComplete create hologram with id `%s`", new Object[] { id });
+          sender.send("&aDone! &eComplete create hologram with id `%s`", id);
           Manager.saveAll();
-        } catch (NumberFormatException ex) {
-          sender.sendError(ex.getMessage(), new Object[0]);
+        } catch (IllegalArgumentException | NullPointerException ex) {
+          sender.sendError(ex.getMessage());
           return;
-        } catch (IllegalArgumentException ex) {
-          sender.sendError(ex.getMessage(), new Object[0]);
-          return;
-        } catch (NullPointerException ex) {
-          sender.sendError(ex.getMessage(), new Object[0]);
-          return;
-        } 
+        }
         return;
       } 
-      sender.sendError("/holo create <id> <distance>", new Object[0]);
+      sender.sendError("/holo create <id> <distance>");
       return;
     } 
     if (arg.equalsIgnoreCase("delete")) {
@@ -70,15 +60,15 @@ public class HologramCommand implements Command {
         String id = args[0];
         try {
           Manager.delete(id);
-          sender.send("&aDone! &eComplete delete hologram `%s`", new Object[] { id });
+          sender.send("&aDone! &eComplete delete hologram `%s`", id);
           Manager.saveAll();
         } catch (IllegalArgumentException ex) {
-          sender.sendError(ex.getMessage(), new Object[0]);
+          sender.sendError(ex.getMessage());
           return;
         } 
         return;
       } 
-      sender.sendError("/holo delete <id>", new Object[0]);
+      sender.sendError("/holo delete <id>");
       return;
     } 
     if (arg.equalsIgnoreCase("edit")) {
@@ -87,21 +77,21 @@ public class HologramCommand implements Command {
         String id = args[1];
         if (type.equalsIgnoreCase("add")) {
           if (args.length >= 3) {
-            String displayname = args[2];
+            StringBuilder displayNameBuilder = new StringBuilder(args[2]);
             for (int i = 3; i < args.length; i++)
-              displayname = String.valueOf(displayname) + " " + args[i]; 
-            displayname = iHDeveloperAPI.color(displayname, new Object[0]);
+              displayNameBuilder.append(" ").append(args[i]);
+            String displayName = iHDeveloperAPI.color(displayNameBuilder.toString());
             try {
-              Manager.addText(id, displayname);
-              sender.send("&aDone! &eAdded `%s&e` to `%s`", new Object[] { displayname, id });
+              Manager.addText(id, displayName);
+              sender.send("&aDone! &eAdded `%s&e` to `%s`", displayName, id);
               Manager.saveAll();
             } catch (IllegalArgumentException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
+              sender.sendError(ex.getMessage());
               return;
             } 
             return;
           } 
-          sender.sendError("/hologram edit add <id> [displayname]", new Object[0]);
+          sender.sendError("/hologram edit add <id> [displayname]");
           return;
         } 
         if (type.equalsIgnoreCase("remove")) {
@@ -109,42 +99,36 @@ public class HologramCommand implements Command {
             try {
               int i = Integer.parseInt(args[2]);
               Manager.removeText(id, i);
-              sender.send("&aDone! &eComplete remove line `%s` @ `%s`", new Object[] { Integer.valueOf(i), id });
+              sender.send("&aDone! &eComplete remove line `%s` @ `%s`", i, id);
               Manager.saveAll();
-            } catch (NumberFormatException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
-              return;
             } catch (IllegalArgumentException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
+              sender.sendError(ex.getMessage());
               return;
-            } 
+            }
             return;
           } 
-          sender.sendError("/hologram edit remove <id> <line>", new Object[0]);
+          sender.sendError("/hologram edit remove <id> <line>");
           return;
         } 
         if (type.equalsIgnoreCase("line")) {
           if (args.length >= 4) {
             String line = args[2];
-            String displayname = args[3];
+            StringBuilder displayNameBuilder = new StringBuilder(args[3]);
             for (int i = 4; i < args.length; i++)
-              displayname = String.valueOf(displayname) + " " + args[i]; 
-            displayname = iHDeveloperAPI.color(displayname, new Object[0]);
+              displayNameBuilder.append(" ").append(args[i]);
+            String displayName = iHDeveloperAPI.color(displayNameBuilder.toString());
             try {
               int l = Integer.parseInt(line);
-              Manager.editText(id, l, displayname);
-              sender.send("&aDone! &eComplete edit line `%s` with `%s` @ `%s`", new Object[] { Integer.valueOf(l), displayname, id });
+              Manager.editText(id, l, displayName);
+              sender.send("&aDone! &eComplete edit line `%s` with `%s` @ `%s`", l, displayName, id);
               Manager.saveAll();
-            } catch (NumberFormatException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
-              return;
             } catch (IllegalArgumentException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
+              sender.sendError(ex.getMessage());
               return;
-            } 
+            }
             return;
           } 
-          sender.sendError("/hologram edit line <id> <line> [displayname]", new Object[0]);
+          sender.sendError("/hologram edit line <id> <line> [displayname]");
           return;
         } 
         if (type.equalsIgnoreCase("distance")) {
@@ -153,25 +137,22 @@ public class HologramCommand implements Command {
             try {
               double d = Double.parseDouble(distance);
               Manager.editDistance(id, d);
-              sender.send("&aDone! &eComplete set distance `%s` @ `%s`", new Object[] { distance, id });
+              sender.send("&aDone! &eComplete set distance `%s` @ `%s`", distance, id);
               Manager.saveAll();
-            } catch (NumberFormatException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
-              return;
             } catch (IllegalArgumentException ex) {
-              sender.sendError(ex.getMessage(), new Object[0]);
+              sender.sendError(ex.getMessage());
               return;
-            } 
+            }
             return;
           } 
-          sender.sendError("/hologram edit distance <id> <distance>", new Object[0]);
+          sender.sendError("/hologram edit distance <id> <distance>");
           return;
         } 
       } 
-      sender.sendError("/holo edit add", new Object[0]);
-      sender.sendError("/holo edit remove", new Object[0]);
-      sender.sendError("/holo edit line", new Object[0]);
-      sender.sendError("/holo edit distance", new Object[0]);
+      sender.sendError("/holo edit add");
+      sender.sendError("/holo edit remove");
+      sender.sendError("/holo edit line");
+      sender.sendError("/holo edit distance");
       return;
     } 
     if (arg.equalsIgnoreCase("info") && 
@@ -180,27 +161,27 @@ public class HologramCommand implements Command {
       try {
         sender.sendSub();
         Hologram hologram = Manager.getHologram(id);
-        sender.send("&eId: &f%s", new Object[] { id });
-        sender.send("&eDistance: &f%s", new Object[] { Double.valueOf(hologram.getDistance()) });
-        sender.send("&eLines: ", new Object[0]);
+        sender.send("&eId: &f%s", id);
+        sender.send("&eDistance: &f%s", hologram.getDistance());
+        sender.send("&eLines: ");
         for (int i = 0; i < hologram.getTextList().size(); i++) {
-          sender.send("&b-|- &6%s: &f%s", new Object[] { Integer.valueOf(i), hologram.getTextList().get(i) });
+          sender.send("&b-|- &6%s: &f%s", i, hologram.getTextList().get(i));
         } 
         sender.sendSub();
         return;
       } catch (IllegalArgumentException ex) {
-        sender.sendError(ex.getMessage(), new Object[0]);
+        sender.sendError(ex.getMessage());
         return;
       } 
     } 
     sender.sendSub();
-    sender.send("&9/hologram &ecreate &7<id> <distance>", new Object[0]);
-    sender.send("&9/hologram &edelete &7<id> <line>", new Object[0]);
-    sender.send("&9/hologram &eedit &6add &7<id> [displayname]", new Object[0]);
-    sender.send("&9/hologram &eedit &6remove &7<id>", new Object[0]);
-    sender.send("&9/hologram &eedit &6line &7<id> <line> [displayname]", new Object[0]);
-    sender.send("&9/hologram &eedit &6distance &7<id> <distance>", new Object[0]);
-    sender.send("&9/hologram &einfo", new Object[0]);
+    sender.send("&9/hologram &ecreate &7<id> <distance>");
+    sender.send("&9/hologram &edelete &7<id> <line>");
+    sender.send("&9/hologram &eedit &6add &7<id> [displayname]");
+    sender.send("&9/hologram &eedit &6remove &7<id>");
+    sender.send("&9/hologram &eedit &6line &7<id> <line> [displayname]");
+    sender.send("&9/hologram &eedit &6distance &7<id> <distance>");
+    sender.send("&9/hologram &einfo");
     sender.sendSub();
   }
 }
