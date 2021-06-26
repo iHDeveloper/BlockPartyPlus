@@ -1,11 +1,5 @@
 package me.iHDeveloper.api;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import me.iHDeveloper.api.command.CommandManager;
 import me.iHDeveloper.api.commands.HologramCommand;
 import me.iHDeveloper.api.commands.IssueCommand;
@@ -34,6 +28,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class iHDeveloperAPI {
   private static JavaPlugin plugin;
@@ -197,8 +198,7 @@ public class iHDeveloperAPI {
     if (uuid == null)
       return null; 
     try {
-      HDPlayer u = players.get(uuid);
-      return u;
+      return players.get(uuid);
     } catch (NullPointerException nullPointerException) {
       return null;
     } 
@@ -246,7 +246,7 @@ public class iHDeveloperAPI {
       String value = values[i];
       a = a.replaceAll("%" + key + "%", value);
     } 
-    a = color(a, new Object[0]);
+    a = color(a);
     return a;
   }
 }

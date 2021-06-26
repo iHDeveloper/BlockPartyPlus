@@ -2,7 +2,6 @@ package me.iHDeveloper.api.player;
 
 import me.iHDeveloper.api.Debug;
 import me.iHDeveloper.api.iHDeveloperAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -44,11 +43,7 @@ public class UUIDDatabase {
     }
 
     public UUID get(String name) {
-        String rawUUID = this.uuids.get(name);
-        if (rawUUID == null) {
-            return Bukkit.getPlayer(name).getUniqueId();
-        }
-        return UUID.fromString(rawUUID);
+        return UUID.fromString(this.uuids.get(name));
     }
 
     public void update(HDPlayer player) {

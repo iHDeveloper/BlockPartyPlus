@@ -11,6 +11,7 @@ It will only include the solved mistakes for now.
 - I misspelled `cooling` with `colding`
 - Naming an invalid exception with the name `FloorValidCheckerException`
 - Creating thread for each task in the game... (rip the computer resources)
+- Thinking `EventPriority.HIGHEST` means the first event to be fired! I was completely wrong...
 
 
 ## Backstory
