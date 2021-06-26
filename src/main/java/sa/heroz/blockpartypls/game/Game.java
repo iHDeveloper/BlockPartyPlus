@@ -1,14 +1,9 @@
 package sa.heroz.blockpartypls.game;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.UUID;
 import me.iHDeveloper.api.iHDeveloperAPI;
 import me.iHDeveloper.api.player.HDPlayer;
 import me.iHDeveloper.api.spectate.SpectateSystem;
-import me.iHDeveloper.api.thread.GameThreadManager;
+import me.iHDeveloper.api.tasks.GameTaskRegistry;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import sa.heroz.blockpartypls.entities.RIPEntity;
@@ -16,13 +11,23 @@ import sa.heroz.blockpartypls.holograms.StatsHologram;
 import sa.heroz.blockpartypls.holograms.TopKillsHologram;
 import sa.heroz.blockpartypls.holograms.TopPointsHologram;
 import sa.heroz.blockpartypls.scoreboard.GameScoreboard;
-import sa.heroz.blockpartypls.threads.GameThread;
-import sa.heroz.blockpartypls.threads.StartThread;
+import sa.heroz.blockpartypls.tasks.FinishTask;
+import sa.heroz.blockpartypls.tasks.GameLoopTask;
+import sa.heroz.blockpartypls.tasks.RestartTask;
+import sa.heroz.blockpartypls.tasks.StartTask;
 import sa.heroz.blockpartypls.until.Chat;
 import sa.heroz.blockpartypls.until.Console;
+import sa.heroz.blockpartypls.until.Floor;
 import sa.heroz.blockpartypls.until.GamePlayer;
 import sa.heroz.blockpartypls.until.Settings;
+import sa.heroz.blockpartypls.until.round.Round;
 import sa.heroz.game.HerozGame;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.UUID;
 
 public class Game {
   private static GameState state = GameState.LOADING;
@@ -40,11 +45,31 @@ public class Game {
   private static TopPointsHologram topPointsHologram;
   
   private static GamePlayer winner;
+
+  private static Floor floor;
+
+  private static Round currentRound;
   
   public static void setState(GameState state) {
     Game.state = state;
   }
-  
+
+  public static void setFloor(Floor floor) {
+    Game.floor = floor;
+  }
+
+  public static void setCurrentRound(Round currentRound) {
+    Game.currentRound = currentRound;
+  }
+
+  public static Floor getFloor() {
+    return floor;
+  }
+
+  public static Round getCurrentRound() {
+    return currentRound;
+  }
+
   public static void host() {
     state = GameState.WAITING;
     base = new HashMap<>();
@@ -54,6 +79,10 @@ public class Game {
     topKillsHologram = new TopKillsHologram();
     topPointsHologram = new TopPointsHologram();
     HerozGame.start();
+    GameTaskRegistry.register(StartTask.class);
+    GameTaskRegistry.register(GameLoopTask.class);
+    GameTaskRegistry.register(RestartTask.class);
+    GameTaskRegistry.register(FinishTask.class);
     Console.log("Waiting for player [WAITING STATE]");
   }
   
@@ -99,7 +128,7 @@ public class Game {
     HDPlayer.setGameMode(GameMode.SPECTATOR);
     HDPlayer.teleport(Settings.lobby);
     Chat.broadcast(iHDeveloperAPI.format(Settings.eliminated, 
-          new String[] { "displayname", "round", "reason" }, new String[] { HDPlayer.getDisplayName(), "" + thread.getRound().getId(), reason }));
+          new String[] { "displayname", "round", "reason" }, new String[] { HDPlayer.getDisplayName(), "" + currentRound.getId(), reason }));
     for (GamePlayer gamePlayer : getAlivePlayers())
       gamePlayer.givePoints(25, "Someone died"); 
     RIPEntity entity = new RIPEntity(HDPlayer, fallLocation);
@@ -146,13 +175,9 @@ public class Game {
       Chat.broadcast(iHDeveloperAPI.format(Settings.no_enough, 
             new String[0], 
             new String[0]));
-      try {
-        startGTM.stop();
-      } catch (NullPointerException exception) {
-        exception.printStackTrace();
-      }
       setState(GameState.WAITING);
-    } 
+      GameTaskRegistry.reset(StartTask.class);
+    }
     updateAll();
   }
   
@@ -161,37 +186,19 @@ public class Game {
     Chat.broadcast(iHDeveloperAPI.format(Settings.start_by_admin, 
           new String[] { "displayname" }, new String[] { HDPlayer.getDisplayName() }));
   }
-  
-  public static GameThreadManager startGTM = null;
-  
+
   public static void start() {
     setState(GameState.STARTING);
     updateAll();
-    StartThread start = new StartThread();
-    startGTM = new GameThreadManager(start);
-    startGTM.start();
+    GameTaskRegistry.start(StartTask.class);
   }
 
-  public static void startGame() {
-    setState(GameState.IN_GAME);
-    updateAll();
-  }
-  
-  private static GameThread thread = null;
-  
   public static void play() {
     HerozGame.stop();
     setState(GameState.IN_GAME);
-    thread = new GameThread();
-    GameThreadManager gtm = new GameThreadManager(thread);
-    gtm.start();
     updateAll();
   }
-  
-  public static GameThread getGameThread() {
-    return thread;
-  }
-  
+
   public static void updateAll() {
     for (GamePlayer p : getAllPlayers()) {
       GameScoreboard sb = p.getScoreboard();

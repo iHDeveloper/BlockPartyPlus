@@ -6,8 +6,11 @@ It uses a 3D arena instead of a 2D floor and includes different entertainment mo
 This will be a list of mistakes I made when making this game.
 It will only include the solved mistakes for now.
 
-- I misspelled `destroy` with `distory` **a lot**.
+- I misspelled `destroy` with `destory` **a lot**.
 - I misspelled `because` with `becuase` 🤦‍♂️
+- I misspelled `cooling` with `colding`
+- Naming an invalid exception with the name `FloorValidCheckerException`
+- Creating thread for each task in the game... (rip the computer resources)
 
 
 ## Backstory
