@@ -250,20 +250,20 @@ public class GameCommand implements Command {
   }
   
   private void test1() {
-    (new Floor(null)).drawFloor(block -> {
+    (new Floor()).drawFloor(block -> {
       if (block.getType().equals(Material.WOOL))
         block.setType(Material.GOLD_BLOCK);
     });
   }
   
   private void test2() {
-    (new Floor(null)).drawFloor(block -> {
+    (new Floor()).drawFloor(block -> {
       if (block.getType().equals(Material.GOLD_BLOCK))
         block.setType(Material.WOOL);
     });
   }
-  
+
   private void test5() {
-    (Game.getGameThread()).round = 18;
+    Game.setRoundNumber(10);
   }
 }

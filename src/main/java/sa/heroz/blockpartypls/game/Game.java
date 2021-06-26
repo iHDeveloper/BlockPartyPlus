@@ -49,6 +49,10 @@ public class Game {
   private static Floor floor;
 
   private static Round currentRound;
+
+  private static int roundNumber;
+
+  private static int timeToStart;
   
   public static void setState(GameState state) {
     Game.state = state;
@@ -62,12 +66,28 @@ public class Game {
     Game.currentRound = currentRound;
   }
 
+  public static void setRoundNumber(int roundNumber) {
+    Game.roundNumber = roundNumber;
+  }
+
+  public static void setTimeToStart(int timeToStart) {
+    Game.timeToStart = timeToStart;
+  }
+
   public static Floor getFloor() {
     return floor;
   }
 
   public static Round getCurrentRound() {
     return currentRound;
+  }
+
+  public static int getRoundNumber() {
+    return roundNumber;
+  }
+
+  public static int getTimeToStart() {
+    return timeToStart;
   }
 
   public static void host() {

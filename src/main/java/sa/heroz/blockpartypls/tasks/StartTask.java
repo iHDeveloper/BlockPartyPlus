@@ -21,6 +21,7 @@ public class StartTask implements GameTask {
         }
 
         if (ticks % SECONDS != 0) {
+            Game.setTimeToStart(0);
             return;
         }
 
@@ -38,8 +39,9 @@ public class StartTask implements GameTask {
 
         for (GamePlayer player : Game.getAlivePlayers()) {
             player.getPlayer().getPlayer().setLevel(seconds);
-            Game.updateAll();
         }
+        Game.updateAll();
+        Game.setTimeToStart(ticks);
     }
 
 }

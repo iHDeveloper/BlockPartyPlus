@@ -1,6 +1,7 @@
 package sa.heroz.blockpartypls.scoreboard;
 
 import me.iHDeveloper.api.iHDeveloperAPI;
+import me.iHDeveloper.api.util.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.NameTagVisibility;
@@ -87,7 +88,7 @@ public class GameScoreboard {
     } else if (Game.getState().equals(GameState.STARTING)) {
       getScore(o, 6, "&6");
       try {
-        getScore(o, 5, "&eStarting in %s", Game.startGTM.getMS() / 1000);
+        getScore(o, 5, "&eStarting in %s", Game.getTimeToStart() / TimeUtils.SECONDS);
       } catch (NullPointerException ex) {
         getScore(o, 5, "&eStarting...");
       } 
@@ -100,8 +101,8 @@ public class GameScoreboard {
       getScore(o, 7, "&eSpectators: &f%s", Game.getSpectatorsPlayers().size());
       getScore(o, 6, "&1");
       try {
-        getScore(o, 6, "&eRound: &f%s", Game.getGameThread().getRound().getId());
-        getScore(o, 5, "&eMode: &f%s", Game.getGameThread().getRound().getName());
+        getScore(o, 6, "&eRound: &f%s", Game.getCurrentRound().getId());
+        getScore(o, 5, "&eMode: &f%s", Game.getCurrentRound().getName());
       } catch (NullPointerException ex) {
         getScore(o, 6, "&eRound: &f&kRRR");
         getScore(o, 5, "&eMode: &f&kRRR");

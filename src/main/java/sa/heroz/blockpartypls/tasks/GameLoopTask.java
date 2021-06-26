@@ -59,6 +59,9 @@ public final class GameLoopTask implements GameTask {
 
     @Override
     public void run(int ticks, GameTaskRunnable runnable) {
+        // Update from the game state directly in order to change rounds immediately
+        this.round = Game.getRoundNumber();
+
         // Start Step
         if (ticks == 13 * SECONDS) {
             debug("Starting...");
@@ -102,6 +105,7 @@ public final class GameLoopTask implements GameTask {
             debug("Resetting the floor...");
             currentRound.reset(floor);
             this.round++;
+            Game.setRoundNumber(this.round);
             for (GamePlayer player : Game.getAllPlayers()) {
                 player.getPlayer().getPlayer().setExp(0F);
                 player.getPlayer().getPlayer().setLevel(this.round - 1);
