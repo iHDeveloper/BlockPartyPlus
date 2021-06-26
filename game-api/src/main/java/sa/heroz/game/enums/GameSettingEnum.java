@@ -2,9 +2,11 @@ package sa.heroz.game.enums;
 
 public enum GameSettingEnum {
   INFO_NAME(String.class),
+  INFO_DESCRIPTION(String.class),
   INFO_VERSION(String.class),
   INFO_AUTHOR(String.class),
   INFO_PROTOTYPE(Boolean.class),
+  INFO_ISSUE_TRACKER_URL(String.class),
   PROPERTIES_BOSSBAR(Boolean.class),
   PROPERTIES_TITLE(Boolean.class);
   
@@ -23,8 +25,6 @@ public enum GameSettingEnum {
   }
   
   public boolean check(Class<?> valueType) {
-    if (getValueType().equals(valueType))
-      return true; 
-    return false;
+    return getValueType().equals(valueType);
   }
 }

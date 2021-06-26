@@ -118,6 +118,12 @@ public class HerozGame {
         return (String)i("getAuthor");
     }
 
+    public static String getDescription() { return (String) i("getDescription"); }
+
+    public static String getIssueTrackerUrl() {
+        return (String) i("getIssueTrackerUrl");
+    }
+
     public static boolean isPrototype() {
         return (Boolean) i("isPrototype");
     }
@@ -138,6 +144,8 @@ public class HerozGame {
         s("setName", name);
     }
 
+    public static void setDescription(String description) { s("setDescription", description); }
+
     public static void setVersion(String version) {
         s("setVersion", version);
     }
@@ -156,5 +164,9 @@ public class HerozGame {
 
     public static void setTitle(boolean title) {
         s("setTitle", title);
+    }
+
+    public static void setIssueTrackerUrl(String issueTrackerUrl) {
+        s("setIssueTrackerUrl", issueTrackerUrl);
     }
 }

@@ -28,7 +28,7 @@ import sa.heroz.blockpartypls.until.Console;
 import sa.heroz.blockpartypls.until.Settings;
 import sa.heroz.game.HerozGame;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("unused")
 public class Main extends JavaPlugin {
   public void onEnable() {
     try {
@@ -37,11 +37,13 @@ public class Main extends JavaPlugin {
       try {
         if (!HerozGame.isStarted()) {
           HerozGame.setName("BlockParty+");
+          HerozGame.setDescription("3D Arena with different modes and more then 20 rounds for the players to survive! You aren't just going to dance and that's it here. You are about to experience the real fun of 3D arena. Watch out from falling off the arena.");
           HerozGame.setAuthor("iHDeveloper");
-          HerozGame.setVersion("V0.2");
+          HerozGame.setVersion("0.2");
           HerozGame.setIsPrototype(true);
           HerozGame.setBossBar(true);
           HerozGame.setTitle(true);
+          HerozGame.setIssueTrackerUrl("https://github.com/iHDeveloper/BlockPartyPlus/issues");
         } 
       } catch (Exception ex) {
         Console.log("&cThe game api doesn't loaded!");

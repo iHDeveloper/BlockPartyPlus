@@ -1,10 +1,11 @@
 package sa.heroz.game.api.v1_8;
 
-import java.util.HashMap;
-import java.util.Map;
 import sa.heroz.game.api.GameAPI;
 import sa.heroz.game.enums.GameSettingEnum;
 import sa.heroz.game.exceptions.InvaildClassTypeException;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class HerozGameAPI implements GameAPI {
   private final Map<GameSettingEnum, Object> settings;
@@ -25,6 +26,14 @@ public class HerozGameAPI implements GameAPI {
     } catch (InvaildClassTypeException e) {
       e.printStackTrace();
     } 
+  }
+
+  public void setDescription(String description) {
+    try {
+      setSettings(GameSettingEnum.INFO_DESCRIPTION, description);
+    } catch (InvaildClassTypeException e) {
+      e.printStackTrace();
+    }
   }
   
   public void setVersion(String version) {
@@ -66,9 +75,21 @@ public class HerozGameAPI implements GameAPI {
       e.printStackTrace();
     } 
   }
+
+  public void setIssueTrackerUrl(String issueTrackerUrl) {
+    try {
+      setSettings(GameSettingEnum.INFO_ISSUE_TRACKER_URL, issueTrackerUrl);
+    } catch (InvaildClassTypeException e) {
+      e.printStackTrace();
+    }
+  }
   
   public String getName() {
     return (String)getSetting(GameSettingEnum.INFO_NAME);
+  }
+
+  public String getDescription() {
+    return (String)getSetting(GameSettingEnum.INFO_DESCRIPTION);
   }
   
   public String getVersion() {
@@ -77,6 +98,10 @@ public class HerozGameAPI implements GameAPI {
   
   public String getAuthor() {
     return (String)getSetting(GameSettingEnum.INFO_AUTHOR);
+  }
+
+  public String getIssueTrackerUrl() {
+    return (String) getSetting(GameSettingEnum.INFO_ISSUE_TRACKER_URL);
   }
   
   public boolean isPrototype() {

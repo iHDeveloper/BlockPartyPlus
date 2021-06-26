@@ -1,7 +1,6 @@
 package sa.heroz.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import sa.heroz.game.api.GameAPI;
@@ -35,16 +34,16 @@ public class Main extends JavaPlugin {
     } catch (Exception ex) {
       setEnabled(false);
     } 
-    Console.log("&aEnabled!", new Object[0]);
+    Console.log("&aEnabled!");
   }
   
   private void registerEvents() {
     PluginManager pm = getServer().getPluginManager();
-    pm.registerEvents(new JoinEvent(), (Plugin)this);
+    pm.registerEvents(new JoinEvent(), this);
   }
   
   public void onDisable() {
     HerozGame.stop();
-    Console.log("&cDisabled!", new Object[0]);
+    Console.log("&cDisabled!");
   }
 }
