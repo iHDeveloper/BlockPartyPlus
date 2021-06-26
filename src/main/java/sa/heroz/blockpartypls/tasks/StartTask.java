@@ -34,6 +34,7 @@ public class StartTask implements GameTask {
         }
 
         if (seconds == 30 || seconds == 15 || seconds == 10 || (seconds <= 5 && seconds >= 1)) {
+            Game.getAlivePlayers().forEach(p -> p.getPlayer().sendTitle("§9", "§c" + seconds + "s", 5, 10, 5));
             Chat.broadcast("§eThe game will start in§c %s§e seconds", seconds);
         }
 
