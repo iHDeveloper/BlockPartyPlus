@@ -161,10 +161,14 @@ public class Game {
         entity.showAll();
         if (getAlivePlayers().size() <= 1) {
             setState(GameState.FINISH);
-            GamePlayer winner = (new LinkedList<>(getAlivePlayers())).get(0);
-            Game.winner = winner;
-            Chat.broadcast(iHDeveloperAPI.format(Settings.win,
-                    new String[] { "displayname" }, new String[] { winner.getPlayer().getDisplayName() }));
+            if (getAlivePlayers().size() == 1) {
+                GamePlayer winner = (new LinkedList<>(getAlivePlayers())).get(0);
+                Game.winner = winner;
+                Chat.broadcast(iHDeveloperAPI.format(Settings.win,
+                        new String[]{"displayname"}, new String[]{winner.getPlayer().getDisplayName()}));
+            } else {
+                Chat.broadcast(iHDeveloperAPI.color("§eNo winner for this game..."));
+            }
             for (GamePlayer gamePlayer : getAlivePlayers())
                 players.remove(gamePlayer.getPlayer().getUUID());
             for (GamePlayer gamePlayer : getAllPlayers()) {

@@ -38,6 +38,7 @@ public final class GameLoopTask implements GameTask {
         this.round = 1;
         currentRound = createRound();
         Game.setFloor(floor);
+        Game.setCurrentRound(currentRound);
     }
 
     private Round createRound() {
@@ -77,9 +78,10 @@ public final class GameLoopTask implements GameTask {
         }
 
         // Random color
-        if (ticks == 11 * SECONDS || ticks == 10 * SECONDS  || ticks == 9 * SECONDS) {
-            debug("Generating random color...");
-            currentRound.random(Math.abs((11 * SECONDS) - ticks) + 1);
+        if ((ticks == 11 * SECONDS || ticks == 10 * SECONDS || ticks == 9 * SECONDS)) {
+            final int loop = Math.abs(11 - (ticks / SECONDS)) + 1;
+            debug("Generating random color... (" + loop + ")");
+            currentRound.random(loop);
         }
 
         // Cool down for 3 seconds

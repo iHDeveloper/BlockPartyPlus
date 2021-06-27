@@ -70,10 +70,12 @@ public class GameScoreboard {
             for (GamePlayer p : Game.getAlivePlayers())
                 players.addPlayer(p.getPlayer().getPlayer());
         } else {
-            winner.addPlayer(Game.getWinner().getPlayer().getPlayer());
-            for (GamePlayer loser : Game.getAllPlayers()) {
-                if (!loser.getPlayer().getUUID().equals(Game.getWinner().getPlayer().getUUID()))
-                    losers.addPlayer(loser.getPlayer().getPlayer());
+            if (Game.getWinner() != null) {
+                winner.addPlayer(Game.getWinner().getPlayer().getPlayer());
+                for (GamePlayer loser : Game.getAllPlayers()) {
+                    if (!loser.getPlayer().getUUID().equals(Game.getWinner().getPlayer().getUUID()))
+                        losers.addPlayer(loser.getPlayer().getPlayer());
+                }
             }
         }
         Objective o = this.sb.getObjective("sidebar");
