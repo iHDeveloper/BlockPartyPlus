@@ -28,21 +28,22 @@ public class StartTask implements GameTask {
         final int seconds = ticks / SECONDS;
 
         if (seconds == 0) {
+            Game.setTimeToStart(0);
             Game.play();
             runnable.stop();
             return;
         }
 
         if (seconds == 30 || seconds == 15 || seconds == 10 || (seconds <= 5 && seconds >= 1)) {
-            Game.getAlivePlayers().forEach(p -> p.getPlayer().sendTitle("§9", "§c" + seconds + "s", 5, 10, 5));
+            Game.getAlivePlayers().forEach(p -> p.getPlayer().sendTitle("§c" + seconds + "s", "§eGame will start in", 5, 10, 5));
             Chat.broadcast("§eThe game will start in§c %s§e seconds", seconds);
         }
 
         for (GamePlayer player : Game.getAlivePlayers()) {
             player.getPlayer().getPlayer().setLevel(seconds);
         }
-        Game.updateAll();
         Game.setTimeToStart(ticks);
+        Game.updateAll();
     }
 
 }

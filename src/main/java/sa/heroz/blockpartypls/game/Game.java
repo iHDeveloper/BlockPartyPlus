@@ -223,6 +223,7 @@ public class Game {
     public static void play() {
         HerozGame.stop();
         setState(GameState.IN_GAME);
+        GameTaskRegistry.start(GameLoopTask.class);
         updateAll();
     }
 

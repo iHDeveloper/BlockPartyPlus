@@ -124,7 +124,7 @@ public final class GameLoopTask implements GameTask {
     }
 
     private void tickDeathMatch() {
-        int round = 20 - Game.getCurrentRound().getId();
+        int round = 20 - this.round;
         if (round == 0) {
             TempSettings.pvp = false;
             Chat.broadcast("&4&lDeathMatch! &eWatch out from everything.");

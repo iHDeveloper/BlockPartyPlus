@@ -92,7 +92,7 @@ public class GameScoreboard {
         } else if (Game.getState().equals(GameState.STARTING)) {
             getScore(o, 6, "&6");
             try {
-                getScore(o, 5, "&eStarting in %s", Game.getTimeToStart() / TimeUtils.SECONDS);
+                getScore(o, 5, "&eStarting in %s", (Game.getTimeToStart() / TimeUtils.SECONDS));
             } catch (NullPointerException ex) {
                 getScore(o, 5, "&eStarting...");
             }
