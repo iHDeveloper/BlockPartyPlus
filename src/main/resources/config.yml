@@ -8,7 +8,7 @@ max-players: 20
 #Messages
 messages:
  manage:
-  start: "&aThe game is starting &b| &f%displayname%"
+  start: "&eThe game has been forced to start by &c%displayname%"
  general:
   already: "&cThe game has been already started!"
   full: "&cThe game is full!"

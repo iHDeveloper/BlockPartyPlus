@@ -28,7 +28,7 @@ public class HerozTitle {
 
         Bukkit.getScheduler().runTaskLater(iHDeveloperAPI.getPlugin(), () -> {
             p.send("§cThis game is under development and may produce issues!");
-            p.send("§cPlease report an issue using the following link below:");
+            p.send("§cPlease report any issue using the following link below:");
             p.sendEmpty();
             p.send("§c§n%s", HerozGame.getIssueTrackerUrl());
             p.sendEmpty();

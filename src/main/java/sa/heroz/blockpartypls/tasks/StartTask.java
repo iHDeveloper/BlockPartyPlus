@@ -15,7 +15,7 @@ import static me.iHDeveloper.api.util.TimeUtils.SECONDS;
 public class StartTask implements GameTask {
 
     public void run(int ticks, GameTaskRunnable runnable) {
-        if (iHDeveloperAPI.getPlayers().size() <= Settings.maxPlayers / 2) {
+        if (!Game.isForceStart() && iHDeveloperAPI.getPlayers().size() <= Settings.maxPlayers / 2) {
             runnable.reset();
             return;
         }
